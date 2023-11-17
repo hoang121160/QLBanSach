@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"books"},{"l":"books.bean"},{"l":"books.controller"},{"l":"books.view"}];updateSearchResults();
