@@ -42,4 +42,32 @@ public class TheLoaiService {
         }
         return null;
     }
+    public void addTheLoai(TheLoai theLoai) {
+        Connection conn = DBcontext.getConnection();
+        String sql = "INSERT INTO TheLoai (ten) VALUES (?)";
+        try {
+            // Tạo PreparedStatement
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, theLoai.getTen());
+            // Thực thi câu lệnh SQL để thêm tác giả vào cơ sở dữ liệu
+            ps.executeUpdate();
+            // Đóng kết nối và các đối tượng liên quan
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteTheLoai(int maTheLoai) {
+        String sql = "DELETE FROM TheLoai WHERE maTheLoai = ?";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, maTheLoai);
+            pstmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }

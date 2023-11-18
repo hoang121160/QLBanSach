@@ -22,11 +22,11 @@ public class SanPhamController {
     public List<SanPham> getAllSanPham() {
         return service.getAllSanPham();
     }
-//    public void addSanPham(SanPham tacGia) {
-//        // Thực hiện logic để thêm tác giả vào cơ sở dữ liệu
-//        // Ví dụ: Gọi phương thức trong service để thêm tác giả
-//        service.addSanPham(tacGia);
-//    }
+    public void addSanPham(SanPham sanPham) {
+        // Thực hiện logic để thêm tác giả vào cơ sở dữ liệu
+        // Ví dụ: Gọi phương thức trong service để thêm tác giả
+        service.addSanPham(sanPham);
+    }
 //    public void deleteSanPham(int maSanPham){
 //        service.deleteSanPham(maSanPham);
 //    }

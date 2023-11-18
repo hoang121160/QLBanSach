@@ -67,15 +67,10 @@ public class TacGiaService {
     public void deleteTacGia(int maTacGia) {
         String sql = "DELETE FROM tacGia WHERE maTacGia = ?";
 
-        try (Connection conn = DBcontext.getConnection(); 
+        try (Connection conn = DBcontext.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maTacGia);
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows > 0) {
-                System.out.println("Xóa tác giả thành công");
-            } else {
-                System.out.println("Không tìm thấy tác giả có mã: " + maTacGia);
-            }
+            pstmt.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
