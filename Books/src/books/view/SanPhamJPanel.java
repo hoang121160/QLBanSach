@@ -17,6 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
@@ -110,7 +112,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     public void loadSanPhamToTextBoxes(int i) {
         SanPham sanPham = new SanPham();
-        txtMaSPCT1.setText(tblSanPham.getValueAt(i, 1).toString());
+        txtMaSP.setText(tblSanPham.getValueAt(i, 1).toString());
         txtTen1.setText(tblSanPham.getValueAt(i, 2).toString());
     }
 
@@ -152,6 +154,33 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         }
     }
 
+    private void hideColumn(int columnIndex) {
+        TableColumn column = tblThuocTinh.getColumnModel().getColumn(columnIndex);
+        column.setMaxWidth(0);
+        column.setMinWidth(0);
+        column.setPreferredWidth(0);
+    }
+
+    private void showColumn(int columnIndex) {
+        resetTableColumns();
+        TableColumn column = tblThuocTinh.getColumnModel().getColumn(columnIndex);
+        column.setMaxWidth(Integer.MAX_VALUE); // Khôi phục chiều rộng mặc định
+        column.setMinWidth(15); // Đặt chiều rộng tối thiểu
+        column.setPreferredWidth(75); // Đặt chiều rộng ưa thích (có thể điều chỉnh)
+        column.setResizable(true); // Đảm bảo cột có thể điều chỉnh kích thước
+        
+    }
+
+    private void resetTableColumns() {
+        TableColumnModel columnModel = tblThuocTinh.getColumnModel();
+
+        for (int i = 0; i < columnModel.getColumnCount(); i++) {
+            TableColumn column = columnModel.getColumn(i);
+            column.setMaxWidth(Integer.MAX_VALUE);
+            column.setMinWidth(15);
+            column.setResizable(true);
+        }
+    }
 //    private void selectRow(int i) {
 //        SanPhamChiTiet sp = new SanPhamChiTiet();
 //        DefaultTableModel tblModel = (DefaultTableModel) tblSanPhamChiTiet.getModel();
@@ -167,6 +196,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 //        txtLanTaiBan.setText(tblModel.getValueAt(i, 9).toString());
 //
 //    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -181,7 +211,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jTabbedPane6 = new javax.swing.JTabbedPane();
         jPanel13 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        txtMaSPCT1 = new javax.swing.JTextField();
+        txtMaSP = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtTen1 = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
@@ -255,7 +285,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
         jLabel10.setText("Mã sản phẩm:");
 
-        txtMaSPCT1.setEditable(false);
+        txtMaSP.setEditable(false);
 
         jLabel13.setText("Tên sản phẩm:");
 
@@ -326,7 +356,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addGap(42, 42, 42)
-                        .addComponent(txtMaSPCT1, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtMaSP, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(72, 72, 72)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(325, Short.MAX_VALUE))
@@ -337,7 +367,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 .addGap(32, 32, 32)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(txtMaSPCT1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtMaSP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(58, 58, 58)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
@@ -960,6 +990,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             // Sau khi thêm tác giả thành công, cập nhật combobox cboTacGia
             cboTacGia.addItem(sanPham.getTen());
             // Xóa dữ liệu trên các trường nhập liệu
+            txtMaSP.setText("");
             txtTen1.setText("");
             loadSanPhamToTable();
         } catch (Exception ex) {
@@ -1039,6 +1070,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         loadTacGiaToTable();
         if (rdoTacGia.isSelected()) {
             rdoTheLoai.setSelected(false);
+            showColumn(2);
         }
 
         // TODO add your handling code here:
@@ -1049,7 +1081,11 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
         if (rdoTheLoai.isSelected()) {
             rdoTacGia.setSelected(false);
-        }// TODO add your handling code here:
+            hideColumn(2);
+        } else {
+            showColumn(2);
+        }
+
     }//GEN-LAST:event_rdoTheLoaiActionPerformed
 
     private void btnThemTGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemTGActionPerformed
@@ -1241,8 +1277,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTable tblThuocTinh;
     private javax.swing.JTextField txtGia;
     private javax.swing.JTextField txtLanTaiBan;
+    private javax.swing.JTextField txtMaSP;
     private javax.swing.JTextField txtMaSPCT;
-    private javax.swing.JTextField txtMaSPCT1;
     private javax.swing.JTextField txtMaThuocTinh;
     private javax.swing.JTextField txtNamXuatBan;
     private javax.swing.JTextField txtNgonNgu;
