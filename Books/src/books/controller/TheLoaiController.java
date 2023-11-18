@@ -13,6 +13,7 @@ import java.util.List;
  * @author Admin
  */
 public class TheLoaiController {
+
     private TheLoaiService service;
 
     public TheLoaiController() {
@@ -21,5 +22,14 @@ public class TheLoaiController {
 
     public List<TheLoai> getAllTheLoai() {
         return service.getAllTheLoai();
+    }
+
+    public void addTheLoai(TheLoai theLoai) {
+
+        service.addTheLoai(theLoai);
+    }
+
+    public void deleteTheLoai(int maTheLoai) {
+        service.deleteTheLoai(maTheLoai);
     }
 }

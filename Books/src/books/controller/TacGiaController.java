@@ -20,8 +20,7 @@ public class TacGiaController {
         return service.getAllTacGia();
     }
     public void addTacGia(TacGia tacGia) {
-        // Thực hiện logic để thêm tác giả vào cơ sở dữ liệu
-        // Ví dụ: Gọi phương thức trong service để thêm tác giả
+
         service.addTacGia(tacGia);
     }
     public void deleteTacGia(int maTacGia){
