@@ -8,7 +8,7 @@ import books.controller.HoaDonChiTietController;
 import books.controller.SanPhamChiTietController;
 import books.model.HoaDonChiTiet;
 import books.model.SanPhamChiTiet;
-import books.service.HoaDonService;
+import books.service.HoaDonChiTietService;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -22,11 +22,11 @@ public class HoaDonNew extends javax.swing.JPanel {
      * Creates new form HoaDonNew
      */
     private SanPhamChiTietController sanPhamChiTietController ;
-    private HoaDonService service;
+    private HoaDonChiTietService service;
 
     public HoaDonNew() {
         initComponents();
-        service = new HoaDonService();
+        service = new HoaDonChiTietService();
         sanPhamChiTietController = new SanPhamChiTietController();
         loadHoaDonChiTietToTable();
         loadSanPhamChiTietToTable();

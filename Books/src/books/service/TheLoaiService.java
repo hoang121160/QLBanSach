@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBcontext;
+import books.connect.DBconnect;
 import books.model.TheLoai;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +26,7 @@ public class TheLoaiService {
     public List<TheLoai> getAllTheLoai() {
         try {
             List<TheLoai> list = new ArrayList<>();
-            Connection conn = DBcontext.getConnection();
+            Connection conn = DBconnect.getConnection();
             String sql = "SELECT MaTheLoai, ten FROM TheLoai";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();

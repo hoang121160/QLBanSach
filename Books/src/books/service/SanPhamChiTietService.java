@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBcontext;
+import books.connect.DBconnect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -81,7 +81,7 @@ public class SanPhamChiTietService {
     public List<SanPhamChiTiet> getAllSanPhamChiTiet() {
         try {
             List<SanPhamChiTiet> list = new ArrayList<>();
-            Connection conn = DBcontext.getConnection();
+            Connection conn = DBconnect.getConnection();
             String sql = "SELECT\n"
                     + "    spct.maSPCT,\n"
                     + "    tg.ten AS tenTacGia,\n"
@@ -122,7 +122,7 @@ public class SanPhamChiTietService {
     public List<SanPhamChiTiet> getSanPhamChiTietByMaSP(int maSP) {
     try {
         List<SanPhamChiTiet> list = new ArrayList<>();
-        Connection conn = DBcontext.getConnection();
+        Connection conn = DBconnect.getConnection();
         String sql = "SELECT\n"
                 + "    spct.maSPCT,\n"
                 + "    tg.ten AS tenTacGia,\n"
@@ -166,7 +166,7 @@ public class SanPhamChiTietService {
 
     public void addSanPhamChiTiet(SanPhamChiTiet sp) {
         try {
-            Connection conn = DBcontext.getConnection();
+            Connection conn = DBconnect.getConnection();
             String query = "INSERT INTO SanPhamChiTiet (MaTacGia, MaTheLoai, ten, gia, ngonNgu, soTrang, nhaXuatBan, namXuatBan, lanTaiBan)\n"
                     + "VALUES(?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);

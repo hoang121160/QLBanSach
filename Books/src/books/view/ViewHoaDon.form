@@ -198,7 +198,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="jTabbedPane7" max="32767" attributes="0"/>
-                          <Component id="jTabbedPane6" max="32767" attributes="0"/>
+                          <Component id="jTabbedPane6" pref="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   </Group>
