@@ -5,7 +5,7 @@
 package books.controller;
 
 import books.bean.DanhMucBean;
-import books.view.BanHangJPanel;
+import books.view.ViewHoaDon;
 import books.view.DangXuatJPanel;
 import books.view.HoaDonNew;
 import books.view.KhachHangJPanel;
@@ -79,7 +79,7 @@ public class ChuyenManHinhController {
                     node = new NhanVienJPanel();
                     break;
                 case "BanHang":
-                    node = new BanHangJPanel();
+                    node = new ViewHoaDon();
                     break;
                 case "HoaDon":
                     node = new HoaDonNew();

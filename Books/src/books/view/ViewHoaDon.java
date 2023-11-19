@@ -3,18 +3,129 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package books.view;
+import books.controller.HoaDonChiTietController;
+import books.controller.HoaDonController;
+import books.controller.SanPhamChiTietController;
+import books.model.HoaDon;
+import books.model.HoaDonChiTiet;
+import books.model.SanPham;
+import books.model.SanPhamChiTiet;
+import books.service.HoaDonChiTietService;
+import books.service.HoaDonService;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Admin
  */
-public class BanHangJPanel extends javax.swing.JPanel {
+public class ViewHoaDon extends javax.swing.JPanel {
+    DefaultTableModel model = new DefaultTableModel();
+    List<HoaDon> listHoaDons = new ArrayList<>();
+    HoaDonService service = new HoaDonService();
+    DefaultTableModel dtm = new DefaultTableModel();
+    List<HoaDonChiTiet> listHoaDonChiTiets = new ArrayList<>();
+    private HoaDonController hoaDonController;
+    HoaDonChiTietService serviceChiTiet = new HoaDonChiTietService();
+    List<SanPhamChiTiet> listsaSanPhamChiTiets = new ArrayList<>();
+    private SanPhamChiTietController sanPhamChiTietController;
+    private HoaDonChiTietController hoaDonChiTietController;
+    DefaultTableModel model1 = new DefaultTableModel();
+    DefaultTableModel modelTaiquay = new DefaultTableModel();
+    
 
     /**
      * Creates new form BanHangJpael
      */
-    public BanHangJPanel() {
+    public ViewHoaDon() {
         initComponents();
+        model = (DefaultTableModel) tblHoaDon2.getModel();
+        dtm = (DefaultTableModel) tblHoaDonChiTiet.getModel();
+        model1 = (DefaultTableModel) tblHoaDon.getModel();
+        modelTaiquay = (DefaultTableModel) tblHoaDon1.getModel();
+        listHoaDons = service.getAll();
+        showData(listHoaDons);
+        listHoaDonChiTiets= serviceChiTiet.getAllHoaDonChiTiet();
+        showDataChiTiet(listHoaDonChiTiets);
+        showDataChiTiet1(listHoaDonChiTiets);
+        showData1(listHoaDons);
+        //loadSanPhamToTable1();
+    }
+    public void showData(List<HoaDon> ds) {
+        model.setRowCount(0);
+
+        for (HoaDon hd : ds) {
+            model.addRow(new Object[]{
+                hd.getMaHD(),
+                hd.getMaKH(),
+                hd.getCreateAt(),
+                hd.getUpdateAt(),
+                hd.getMaNV(),
+                hd.getMaNV(),
+                hd.getTenNguoiNhan(),
+                hd.getDiaChiNhan(),
+                hd.getSoDienThoai(),
+                hd.getHinhThucThanhToan(),
+                hd.getTrangThai(),});
+
+        }
+    }
+
+    public void showDataChiTiet(List<HoaDonChiTiet> ds) {
+        dtm.setRowCount(0);
+
+        for (HoaDonChiTiet hdct : ds) {
+            dtm.addRow(new Object[]{
+                hdct.getMaSPCT(),
+                hdct.getTenSp(),
+                hdct.getTenSp(),
+                hdct.getThanhTien(),
+                hdct.getSoLuong(),
+                hdct.getDonGia(),
+                hdct.getThanhTien(),
+               
+            });
+                
+
+        }
+    }
+    public void showData1(List<HoaDon> ds) {
+        modelTaiquay.setRowCount(0);
+
+        for (HoaDon hd : ds) {
+            modelTaiquay.addRow(new Object[]{
+                hd.getMaHD(),
+                hd.getMaHD(),
+                hd.getCreateAt(),
+                hd.getUpdateAt(),
+                hd.getMaNV(),
+                hd.getMaNV(),
+                hd.getTenNguoiNhan(),
+                hd.getDiaChiNhan(),
+                hd.getSoDienThoai(),
+                hd.getHinhThucThanhToan(),
+                hd.getTrangThai(),});
+
+        }
+    }
+    public void showDataChiTiet1(List<HoaDonChiTiet> ds) {
+        model1.setRowCount(0);
+
+        for (HoaDonChiTiet hdct : ds) {
+            model1.addRow(new Object[]{
+                hdct.getMaSPCT(),
+                hdct.getTenSp(),
+                hdct.getTenSp(),
+                hdct.getThanhTien(),
+                hdct.getSoLuong(),
+                hdct.getDonGia(),
+                hdct.getThanhTien(),
+               
+            });
+                
+
+        }
     }
 
     /**
@@ -257,7 +368,7 @@ public class BanHangJPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTabbedPane7)
-                    .addComponent(jTabbedPane6))
+                    .addComponent(jTabbedPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(26, 26, 26))
         );
         jPanel3Layout.setVerticalGroup(

@@ -4,7 +4,7 @@
  */
 package books.controller;
 
-import books.service.HoaDonService;
+import books.service.HoaDonChiTietService;
 import books.model.HoaDonChiTiet;
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,10 +15,10 @@ import java.util.List;
  */
 public class HoaDonChiTietController {
 
-    private HoaDonService hoaDonService;
+    private HoaDonChiTietService hoaDonService;
 
     public HoaDonChiTietController() {
-        hoaDonService = new HoaDonService();
+        hoaDonService = new HoaDonChiTietService();
     }
 
     public List<HoaDonChiTiet> getAllHoaDonChiTiet() {
