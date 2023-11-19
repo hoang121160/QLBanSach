@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBconnect;
+import books.connect.DBcontext;
 import books.model.HoaDon;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +37,7 @@ public class HoaDonService {
                        
                       FROM [dbo].[HoaDon]
                     """;
-        try ( Connection con = DBconnect.getConnection();  PreparedStatement ps = con.prepareStatement(sql)) {
+        try ( Connection con = DBcontext.getConnection();  PreparedStatement ps = con.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 HoaDon hd = new HoaDon();

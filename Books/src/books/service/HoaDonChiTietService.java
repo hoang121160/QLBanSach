@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBconnect;
+import books.connect.DBcontext;
 import books.model.HoaDonChiTiet;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -27,7 +27,7 @@ public class HoaDonChiTietService {
     public List<HoaDonChiTiet> getAllHoaDonChiTiet() {
         try {
             List<HoaDonChiTiet> list = new ArrayList<>();
-            Connection conn = DBconnect.getConnection();
+            Connection conn = DBcontext.getConnection();
             String sql = "SELECT H.maSPCT, S.ten as tenSp, H.soLuong, H.donGia, H.thanhTien, H.trangThai FROM HoaDonChiTiet H INNER JOIN SanPhamChiTiet S ON H.maSPCT = S.maSPCT";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
