@@ -18,9 +18,9 @@ import java.util.logging.Logger;
  */
 public class DBconnect {
      public static String USER = "sa";
-    public static String PASS = "tranvandang09122004";
+    public static String PASS = "khonghoang01";
 
-    public static String URL = "jdbc:sqlserver://localhost:1433;databaseName=bansachvn1";
+    public static String URL = "jdbc:sqlserver://localhost:1433;databaseName=bansachvn";
     static{
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

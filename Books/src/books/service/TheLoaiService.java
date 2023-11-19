@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBcontext;
+import books.connect.DBconnect;
 import books.model.TheLoai;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +26,7 @@ public class TheLoaiService {
     public List<TheLoai> getAllTheLoai() {
         try {
             List<TheLoai> list = new ArrayList<>();
-            Connection conn = DBcontext.getConnection();
+            Connection conn = DBconnect.getConnection();
             String sql = "SELECT MaTheLoai, ten FROM TheLoai";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -43,7 +43,7 @@ public class TheLoaiService {
         return null;
     }
     public void addTheLoai(TheLoai theLoai) {
-        Connection conn = DBcontext.getConnection();
+        Connection conn = DBconnect.getConnection();
         String sql = "INSERT INTO TheLoai (ten) VALUES (?)";
         try {
             // Tạo PreparedStatement
@@ -62,7 +62,7 @@ public class TheLoaiService {
     public void deleteTheLoai(int maTheLoai) {
         String sql = "DELETE FROM TheLoai WHERE maTheLoai = ?";
 
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = DBconnect.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maTheLoai);
             pstmt.executeUpdate();
