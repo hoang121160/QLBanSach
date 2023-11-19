@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
+
 package books.view;
 
 import books.controller.SanPhamChiTietController;
@@ -9,13 +6,10 @@ import books.model.SanPham;
 import books.controller.SanPhamController;
 import books.controller.TacGiaController;
 import books.controller.TheLoaiController;
-import books.model.SanPhamChiTiet;
 import books.model.TacGia;
 import books.model.TheLoai;
 import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -34,7 +28,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private SanPhamController sanPhamController;
     private TheLoaiController theLoaiController;
     private TacGiaController tacGiaController;
-
+    private SanPhamChiTietJFrame sanPhamChiTietJFrame;
     public SanPhamJPanel() {
         initComponents();
         tblModel = new DefaultTableModel();
@@ -89,27 +83,26 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         }
     }
 
-    public void selectRow(int i, DefaultTableModel tblModel, JTextField txtMaSPCT, JComboBox<String> cboTacGia,
-            JComboBox<String> cboTheLoai, JTextField txtTen, JTextField txtGia, JTextField txtNgonNgu,
-            JTextField txtSoTrang, JTextField txtNhaXuatBan, JTextField txtNamXuatBan, JTextField txtLanTaiBan) {
-        if (tblModel == null) {
-            JOptionPane.showMessageDialog(this, "null");
-            return;
-        }
-        SanPhamChiTiet sp = new SanPhamChiTiet();
-        // Các dòng code để điền thông tin từ tblSanPhamChiTiet vào các JTextField
-        txtMaSPCT.setText(tblModel.getValueAt(i, 0).toString());
-        cboTacGia.setSelectedItem(tblModel.getValueAt(i, 1).toString());
-        cboTheLoai.setSelectedItem(tblModel.getValueAt(i, 2).toString());
-        txtTen.setText(tblModel.getValueAt(i, 3).toString());
-        txtGia.setText(tblModel.getValueAt(i, 4).toString());
-        txtNgonNgu.setText(tblModel.getValueAt(i, 5).toString());
-        txtSoTrang.setText(tblModel.getValueAt(i, 6).toString());
-        txtNhaXuatBan.setText(tblModel.getValueAt(i, 7).toString());
-        txtNamXuatBan.setText(tblModel.getValueAt(i, 8).toString());
-        txtLanTaiBan.setText(tblModel.getValueAt(i, 9).toString());
-    }
-
+//    public void selectRow(int i, DefaultTableModel tblModel, JTextField txtMaSPCT, JComboBox<String> cboTacGia,
+//            JComboBox<String> cboTheLoai, JTextField txtTen, JTextField txtGia, JTextField txtNgonNgu,
+//            JTextField txtSoTrang, JTextField txtNhaXuatBan, JTextField txtNamXuatBan, JTextField txtLanTaiBan) {
+//        if (tblModel == null) {
+//            JOptionPane.showMessageDialog(this, "null");
+//            return;
+//        }
+//        SanPhamChiTiet sp = new SanPhamChiTiet();
+//        // Các dòng code để điền thông tin từ tblSanPhamChiTiet vào các JTextField
+//        txtMaSPCT.setText(tblModel.getValueAt(i, 1).toString());
+//        cboTacGia.setSelectedItem(tblModel.getValueAt(i, 2).toString());
+//        cboTheLoai.setSelectedItem(tblModel.getValueAt(i, 3).toString());
+//        txtTen.setText(tblModel.getValueAt(i, 4).toString());
+//        txtGia.setText(tblModel.getValueAt(i, 5).toString());
+//        txtNgonNgu.setText(tblModel.getValueAt(i, 6).toString());
+//        txtSoTrang.setText(tblModel.getValueAt(i, 7).toString());
+//        txtNhaXuatBan.setText(tblModel.getValueAt(i, 8).toString());
+//        txtNamXuatBan.setText(tblModel.getValueAt(i, 9).toString());
+//        txtLanTaiBan.setText(tblModel.getValueAt(i, 10).toString());
+//    }
     public void loadSanPhamToTextBoxes(int i) {
         SanPham sanPham = new SanPham();
         txtMaSP.setText(tblSanPham.getValueAt(i, 1).toString());
@@ -168,7 +161,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         column.setMinWidth(15); // Đặt chiều rộng tối thiểu
         column.setPreferredWidth(75); // Đặt chiều rộng ưa thích (có thể điều chỉnh)
         column.setResizable(true); // Đảm bảo cột có thể điều chỉnh kích thước
-        
+
     }
 
     private void resetTableColumns() {
@@ -181,21 +174,27 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             column.setResizable(true);
         }
     }
-//    private void selectRow(int i) {
-//        SanPhamChiTiet sp = new SanPhamChiTiet();
-//        DefaultTableModel tblModel = (DefaultTableModel) tblSanPhamChiTiet.getModel();
-//        txtMaSPCT.setText(tblModel.getValueAt(i, 0).toString());
-//        cboTacGia.setSelectedItem(tblModel.getValueAt(i, 1).toString());
-//        cboTheLoai.setSelectedItem(tblModel.getValueAt(i, 2).toString());
-//        txtTen.setText(tblModel.getValueAt(i, 3).toString());
-//        txtGia.setText(tblModel.getValueAt(i, 4).toString());
-//        txtNgonNgu.setText(tblModel.getValueAt(i, 5).toString());
-//        txtSoTrang.setText(tblModel.getValueAt(i, 6).toString());
-//        txtNhaXuatBan.setText(tblModel.getValueAt(i, 7).toString());
-//        txtNamXuatBan.setText(tblModel.getValueAt(i, 8).toString());
-//        txtLanTaiBan.setText(tblModel.getValueAt(i, 9).toString());
-//
-//    }
+
+    public void selectRow(int i, DefaultTableModel otherTableModel) {
+        if (otherTableModel == null) {
+            JOptionPane.showMessageDialog(this, "null");
+            return;
+        }
+
+        // Các dòng code để điền thông tin từ tblSanPhamChiTiet vào các JTextField và JComboBox
+        txtMaSPCT.setText(otherTableModel.getValueAt(i, 1).toString());
+        cboTacGia.setSelectedItem(otherTableModel.getValueAt(i, 2).toString());
+        cboTheLoai.setSelectedItem(otherTableModel.getValueAt(i, 3).toString());
+        cboTenSanPham.setSelectedItem(otherTableModel.getValueAt(i, 4).toString());
+        txtGia.setText(otherTableModel.getValueAt(i, 5).toString());
+        txtNgonNgu.setText(otherTableModel.getValueAt(i, 6).toString());
+        txtSoTrang.setText(otherTableModel.getValueAt(i, 7).toString());
+        txtNhaXuatBan.setText(otherTableModel.getValueAt(i, 8).toString());
+        txtNamXuatBan.setText(otherTableModel.getValueAt(i, 9).toString());
+        txtLanTaiBan.setText(otherTableModel.getValueAt(i, 10).toString());
+
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -452,7 +451,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("Sản phẩm", jPanel1);
 
-        jLabel1.setText("Mã sản phẩm:");
+        jLabel1.setText("Mã SPCT:");
 
         txtMaSPCT.setEditable(false);
 
@@ -1005,6 +1004,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         loadSanPhamToTable();
+        txtMaSP.setText("");
+        txtTen1.setText("");
         JOptionPane.showMessageDialog(this, "Sản phẩm đã dược làm mới!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton8ActionPerformed
 

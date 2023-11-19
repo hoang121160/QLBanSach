@@ -21,7 +21,6 @@ import javax.swing.table.DefaultTableModel;
 public class SanPhamChiTietJFrame extends javax.swing.JFrame {
 
     private DefaultTableModel tblModel;
-    private SanPhamJPanel sanPhamPanel;
 
     private JTextField txtMaSPCT;
     private JComboBox<String> cboTacGia;
@@ -37,13 +36,18 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
     private SanPhamJPanel sanPhamJPanel;
 
     public SanPhamChiTietJFrame(int maSP) {
+
         sanPhamChiTietController = new SanPhamChiTietController();
-        sanPhamJPanel = new SanPhamJPanel();
         initComponents();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loadSanPhamChiTietToTable(maSP);
+        setSanPhamJPanel(new SanPhamJPanel());
 
+    }
+
+    public void setSanPhamJPanel(SanPhamJPanel sanPhamJPanel) {
+        this.sanPhamJPanel = sanPhamJPanel;
     }
 
     public void loadSanPhamChiTietToTable(int maSP) {
@@ -205,11 +209,16 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblSanPhamChiTietMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamChiTietMouseClicked
-        int selectedRowIndex = tblSanPhamChiTiet.getSelectedRow();
+        DefaultTableModel otherTableModel = (DefaultTableModel) tblSanPhamChiTiet.getModel();
+        int selectedRow = tblSanPhamChiTiet.getSelectedRow();
 
-        // Gọi phương thức selectRow từ SanPhamJPanel và chuyển các thành phần cần thiết
-        sanPhamJPanel.selectRow(selectedRowIndex, tblModel, txtMaSPCT, cboTacGia, cboTheLoai, txtTen, txtGia,
-                txtNgonNgu, txtSoTrang, txtNhaXuatBan, txtNamXuatBan, txtLanTaiBan);
+        if (selectedRow != -1) {
+            sanPhamJPanel.selectRow(selectedRow, otherTableModel);
+            System.out.println("Value at column 1: " + otherTableModel.getValueAt(selectedRow, 1));
+            System.out.println("Value at column 2: " + otherTableModel.getValueAt(selectedRow, 2));
+        } else {
+            JOptionPane.showMessageDialog(this, "Lỗi!");
+        }
     }//GEN-LAST:event_tblSanPhamChiTietMouseClicked
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
