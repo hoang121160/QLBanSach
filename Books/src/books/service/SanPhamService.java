@@ -17,10 +17,10 @@ import java.util.List;
  * @author Admin
  */
 public class SanPhamService {
-      private List<SanPham> tacGia;
+      private List<SanPham> sanPham;
 
     public SanPhamService() {
-        tacGia = new ArrayList<>();
+        sanPham = new ArrayList<>();
     }
 
     public List<SanPham> getAllSanPham() {
@@ -41,5 +41,21 @@ public class SanPhamService {
             e.printStackTrace();
         }
         return null;
+    }
+    public void addSanPham(SanPham sanPham) {
+        Connection conn = DBcontext.getConnection();
+        String sql = "INSERT INTO SanPham (ten) VALUES (?)";
+        try {
+            // Tạo PreparedStatement
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, sanPham.getTen());
+            // Thực thi câu lệnh SQL để thêm tác giả vào cơ sở dữ liệu
+            ps.executeUpdate();
+            // Đóng kết nối và các đối tượng liên quan
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
