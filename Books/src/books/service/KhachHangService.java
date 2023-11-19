@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBconnect;
+import books.connect.DBcontext;
 import books.model.KhachHang;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +21,7 @@ public class KhachHangService {
     public List<KhachHang> getAllKhachHang() {
         try {
             List<KhachHang> list = new ArrayList<>();
-            Connection conn = DBconnect.getConnection();
+            Connection conn = DBcontext.getConnection();
             String sql = "SELECT maKH, ten, gioiTinh, diaChi, soDienThoai, email FROM KhachHang";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
