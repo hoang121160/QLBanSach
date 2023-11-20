@@ -31,7 +31,7 @@ public class NhanVienService {
                 nv.setNgaySinh(rs.getDate("ngaySinh"));
                 nv.setGioiTinh(rs.getString("gioiTinh"));
                 nv.setDiaChi(rs.getString("diaChi"));
-                nv.setDiaChi(rs.getString("soDienThoai"));
+                nv.setSoDienThoai(rs.getString("soDienThoai"));
                 nv.setEmail(rs.getString("email"));
                 nv.setChucVu(rs.getString("chucVu"));
                 list.add(nv);
