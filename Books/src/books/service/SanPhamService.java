@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBcontext;
+import books.connect.DBconnect;
 import books.model.SanPham;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +26,7 @@ public class SanPhamService {
     public List<SanPham> getAllSanPham() {
         try {
             List<SanPham> list = new ArrayList<>();
-            Connection conn = DBcontext.getConnection();
+            Connection conn = DBconnect.getConnection();
             String sql = "select maSP, ten from SanPham";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -43,7 +43,7 @@ public class SanPhamService {
         return null;
     }
     public void addSanPham(SanPham sanPham) {
-        Connection conn = DBcontext.getConnection();
+        Connection conn = DBconnect.getConnection();
         String sql = "INSERT INTO SanPham (ten) VALUES (?)";
         try {
             // Tạo PreparedStatement

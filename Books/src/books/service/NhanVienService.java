@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBcontext;
+import books.connect.DBconnect;
 import books.model.NhanVien;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +20,7 @@ public class NhanVienService {
     public List<NhanVien> getAllNhanVien() {
         try {
             List<NhanVien> list = new ArrayList<>();
-            Connection conn = DBcontext.getConnection();
+            Connection conn = DBconnect.getConnection();
             String sql = "SELECT maNV, ten, ngaySinh, gioiTinh, diaChi, soDienThoai, email, chucVu from NhanVien";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();

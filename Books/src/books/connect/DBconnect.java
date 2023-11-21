@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author Admin
  */
-public class DBcontext {
+public class DBconnect {
      public static String USER = "sa";
     public static String PASS = "khonghoang01";
 
@@ -25,7 +25,7 @@ public class DBcontext {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(DBcontext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     public static Connection getConnection(){
@@ -33,7 +33,7 @@ public class DBcontext {
         try {
             cn = DriverManager.getConnection(URL, USER, PASS);
         } catch (SQLException ex) {
-            Logger.getLogger(DBcontext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DBconnect.class.getName()).log(Level.SEVERE, null, ex);
         }
         return cn;
     } 

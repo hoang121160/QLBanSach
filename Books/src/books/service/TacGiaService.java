@@ -4,7 +4,7 @@
  */
 package books.service;
 
-import books.connect.DBcontext;
+import books.connect.DBconnect;
 import books.model.TacGia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,7 +28,7 @@ public class TacGiaService {
     public List<TacGia> getAllTacGia() {
         try {
             List<TacGia> list = new ArrayList<>();
-            Connection conn = DBcontext.getConnection();
+            Connection conn = DBconnect.getConnection();
             String sql = "SELECT maTacGia, ten, tieuSu FROM TacGia";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -47,7 +47,7 @@ public class TacGiaService {
     }
 
     public void addTacGia(TacGia tacGia) {
-        Connection conn = DBcontext.getConnection();
+        Connection conn = DBconnect.getConnection();
         String sql = "INSERT INTO TacGia (ten, tieuSu) VALUES (?, ?)";
         try {
             // Tạo PreparedStatement
@@ -66,8 +66,7 @@ public class TacGiaService {
 
     public void deleteTacGia(int maTacGia) {
         String sql = "DELETE FROM tacGia WHERE maTacGia = ?";
-
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = DBconnect.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, maTacGia);
             pstmt.executeUpdate();
