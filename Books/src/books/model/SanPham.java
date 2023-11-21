@@ -43,7 +43,7 @@ public class SanPham {
     public void setMaSP(int maSP) {
         this.maSP = maSP;
     }
-
+   
     public String getTen() {
         return ten;
     }

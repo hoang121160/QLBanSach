@@ -138,5 +138,11 @@ public class SanPhamChiTiet {
         }
         this.theLoai.setTenTheLoai(tenTheLoai);
     }
+    public void setSanPham(int maSP) {
+        if (this.sanPham == null) {
+            this.sanPham = new SanPham();
+        }
+        this.sanPham.setMaSP(maSP);
+    }
 
 }

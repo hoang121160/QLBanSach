@@ -13,6 +13,7 @@ import java.util.List;
 import books.model.SanPhamChiTiet;
 import books.model.TacGia;
 import books.model.TheLoai;
+import books.model.SanPham;
 
 /**
  *
@@ -83,6 +84,7 @@ public class SanPhamChiTietService {
             List<SanPhamChiTiet> list = new ArrayList<>();
             Connection conn = DBconnect.getConnection();
             String sql = "SELECT\n"
+                    + "    sp.maSP as maSP,\n"
                     + "    spct.maSPCT,\n"
                     + "    tg.ten AS tenTacGia,\n"
                     + "    tl.ten AS tenTheLoai,\n"
@@ -96,11 +98,13 @@ public class SanPhamChiTietService {
                     + "FROM\n"
                     + "    SanPhamChiTiet spct\n"
                     + "    INNER JOIN TacGia tg ON spct.MaTacGia = tg.maTacGia\n"
-                    + "    INNER JOIN TheLoai tl ON spct.MaTheLoai = tl.MaTheLoai";
+                    + "    INNER JOIN TheLoai tl ON spct.MaTheLoai = tl.MaTheLoai\n"
+                    + "    INNER JOIN SanPham sp ON spct.maSP = sp.maSP";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 SanPhamChiTiet spct = new SanPhamChiTiet();
+                spct.setSanPham(rs.getInt("maSP"));
                 spct.setMaSPCT(rs.getInt("maSPCT"));
                 spct.setTacGia(rs.getString("tenTacGia"));
                 spct.setTheLoai(rs.getString("tenTheLoai"));
@@ -166,23 +170,28 @@ public class SanPhamChiTietService {
 
     public void addSanPhamChiTiet(SanPhamChiTiet sp) {
         try {
-            Connection conn = DBconnect.getConnection();
-            String query = "INSERT INTO SanPhamChiTiet (MaTacGia, MaTheLoai, ten, gia, ngonNgu, soTrang, nhaXuatBan, namXuatBan, lanTaiBan)\n"
-                    + "VALUES(?,?,?,?,?,?,?,?,?)";
+
+            Connection conn = DBcontext.getConnection();
+            String query = "INSERT INTO SanPhamChiTiet (maSP,MaTacGia, MaTheLoai, ten, gia, ngonNgu, soTrang, nhaXuatBan, namXuatBan, lanTaiBan)\n"
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
+            
             TacGia tacGia = sp.getTacGia();
             String tenTacGia = tacGia.getTen();
             ps.setString(1, tenTacGia);
             TheLoai theLoai = sp.getTheLoai();
             String tenTheLoai = theLoai.getTen();
             ps.setString(2, tenTheLoai);
-            ps.setString(3, sp.getTen());
-            ps.setBigDecimal(4, sp.getGia());
-            ps.setString(5, sp.getNgonNgu());
-            ps.setInt(6, sp.getSoTrang());
-            ps.setString(7, sp.getNhaXuatBan());
-            ps.setInt(8, sp.getNamXuatBan());
-            ps.setInt(9, sp.getLanTaiBan());
+            SanPham sanPham = sp.getSanPham();
+            String tenSP = sanPham.getTen();
+            ps.setString(3, tenSP);
+            ps.setString(4, sp.getTen());
+            ps.setBigDecimal(5, sp.getGia());
+            ps.setString(6, sp.getNgonNgu());
+            ps.setInt(7, sp.getSoTrang());
+            ps.setString(8, sp.getNhaXuatBan());
+            ps.setInt(9, sp.getNamXuatBan());
+            ps.setInt(10, sp.getLanTaiBan());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
