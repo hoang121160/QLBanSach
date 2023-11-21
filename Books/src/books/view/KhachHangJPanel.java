@@ -48,7 +48,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         KhachHang kh = new KhachHang();
         txtMaKH.setText(tblKhachHang.getValueAt(i, 0).toString());
         txtTen.setText(tblKhachHang.getValueAt(i, 1).toString());
-        String gioiTinh = tblKhachHang.getValueAt(i, 1).toString();
+        String gioiTinh = tblKhachHang.getValueAt(i, 2).toString();
         if ("Nam".equals(gioiTinh)) {
             rdoNam.setSelected(true);
             rdoNu.setSelected(false);

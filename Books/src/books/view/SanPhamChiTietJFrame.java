@@ -5,7 +5,12 @@
 package books.view;
 
 import books.controller.SanPhamChiTietController;
+import books.controller.TacGiaController;
+import books.controller.TheLoaiController;
+import books.model.SanPham;
 import books.model.SanPhamChiTiet;
+import books.model.TacGia;
+import books.model.TheLoai;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -34,16 +39,28 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
     private JTextField txtLanTaiBan;
     private SanPhamChiTietController sanPhamChiTietController;
     private SanPhamJPanel sanPhamJPanel;
+     private TheLoaiController theLoaiController;
+    private TacGiaController tacGiaController;
 
     public SanPhamChiTietJFrame(int maSP) {
 
         sanPhamChiTietController = new SanPhamChiTietController();
+        theLoaiController = new TheLoaiController();
+        tacGiaController = new TacGiaController();
         initComponents();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         loadSanPhamChiTietToTable(maSP);
         setSanPhamJPanel(new SanPhamJPanel());
-
+        List<TheLoai> theLoaiList = theLoaiController.getAllTheLoai();
+        for (TheLoai theLoai : theLoaiList) {
+            cboTL.addItem(theLoai.getTen());
+        }
+        List<TacGia> tacGiaList = tacGiaController.getAllTacGia();
+        for (TacGia tacGia : tacGiaList) {
+            cboTG.addItem(tacGia.getTen());
+        }
+        
     }
 
     public void setSanPhamJPanel(SanPhamJPanel sanPhamJPanel) {
@@ -89,12 +106,11 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
         tblSanPhamChiTiet = new javax.swing.JTable();
         btnXoa = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
         jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         lblCount = new javax.swing.JLabel();
+        cboTG = new javax.swing.JComboBox<>();
+        cboTL = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -128,12 +144,6 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
 
         jLabel1.setText("Tìm kiếm");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jLabel2.setText("Tổng số sản phẩm:");
 
         lblCount.setForeground(new java.awt.Color(255, 0, 51));
@@ -143,7 +153,7 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
         jInternalFrame1Layout.setHorizontalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jInternalFrame1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(348, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
                 .addComponent(lblCount, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -161,13 +171,11 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(58, 58, 58)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(209, 209, 209))))
+                        .addGap(90, 90, 90)
+                        .addComponent(cboTG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addComponent(cboTL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jInternalFrame1Layout.setVerticalGroup(
             jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -175,10 +183,9 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jInternalFrame1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboTG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cboTL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -209,16 +216,16 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblSanPhamChiTietMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamChiTietMouseClicked
-        DefaultTableModel otherTableModel = (DefaultTableModel) tblSanPhamChiTiet.getModel();
-        int selectedRow = tblSanPhamChiTiet.getSelectedRow();
-
-        if (selectedRow != -1) {
-            sanPhamJPanel.selectRow(selectedRow, otherTableModel);
-            System.out.println("Value at column 1: " + otherTableModel.getValueAt(selectedRow, 1));
-            System.out.println("Value at column 2: " + otherTableModel.getValueAt(selectedRow, 2));
-        } else {
-            JOptionPane.showMessageDialog(this, "Lỗi!");
-        }
+//        DefaultTableModel otherTableModel = (DefaultTableModel) tblSanPhamChiTiet.getModel();
+//        int selectedRow = tblSanPhamChiTiet.getSelectedRow();
+//
+//        if (selectedRow != -1) {
+//            sanPhamJPanel.selectRow(selectedRow, otherTableModel);
+//            System.out.println("Value at column 1: " + otherTableModel.getValueAt(selectedRow, 1));
+//            System.out.println("Value at column 2: " + otherTableModel.getValueAt(selectedRow, 2));
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Lỗi!");
+//        }
     }//GEN-LAST:event_tblSanPhamChiTietMouseClicked
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
@@ -271,9 +278,8 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnXoa;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
+    private javax.swing.JComboBox<String> cboTG;
+    private javax.swing.JComboBox<String> cboTL;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
