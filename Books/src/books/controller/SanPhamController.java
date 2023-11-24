@@ -27,6 +27,9 @@ public class SanPhamController {
         // Ví dụ: Gọi phương thức trong service để thêm tác giả
         service.addSanPham(sanPham);
     }
+    public void updateSanPham(SanPham sanPhamToUpdate){
+        service.updateSanPham(sanPhamToUpdate);
+    }
 //    public void deleteSanPham(int maSanPham){
 //        service.deleteSanPham(maSanPham);
 //    }
