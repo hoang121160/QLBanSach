@@ -41,7 +41,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         loadSanPhamChiTietToTable();
         rdoTacGia.setSelected(true);
         loadTacGiaToTable();
-        
 
 //        loadTheLoaiToTable();
 //        loadTacGiaToTable();
@@ -86,6 +85,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             dtm.addRow(rowData);
         }
     }
+
     private void selectRow(int i) {
         SanPhamChiTiet sp = new SanPhamChiTiet();
         DefaultTableModel tblModel = (DefaultTableModel) tblSPCT.getModel();
@@ -242,7 +242,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 //        txtLanTaiBan.setText(otherTableModel.getValueAt(i, 10).toString());
 //
 //    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -349,6 +348,11 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         });
 
         jButton6.setText("Sửa");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jButton7.setText("Chi tiết SP");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
@@ -1250,7 +1254,71 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnThemTGActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
+if (rdoTacGia.isSelected()) {
+            try {
+                // Lấy thông tin từ giao diện người dùng
+                int maTacGia = Integer.parseInt(txtMaThuocTinh.getText());
+                String tenTacGia = txtTen.getText();
+                String tieuSu = txtTieuSu.getText();
+
+                // Tạo đối tượng TacGia với thông tin cập nhật
+                TacGia tacGiaToUpdate = new TacGia();
+                tacGiaToUpdate.setMaTacGia(maTacGia);
+                tacGiaToUpdate.setTen(tenTacGia);
+                tacGiaToUpdate.setTieuSu(tieuSu);
+
+                // Thực hiện cập nhật thông tin trong cơ sở dữ liệu
+                tacGiaController.updateTacGia(tacGiaToUpdate);
+                loadTacGiaToTable();
+                txtMaThuocTinh.setText("");
+                txtTen.setText("");
+                txtTieuSu.setText("");
+                // Hiển thị thông báo thành công
+                JOptionPane.showMessageDialog(this, "Cập nhật thông tin tác giả thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+                // Các bước bổ sung sau khi cập nhật, như làm mới hiển thị, load lại dữ liệu, v.v.
+                // ...
+            } catch (NumberFormatException ex) {
+                // Xử lý nếu có lỗi định dạng số
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập định dạng số hợp lệ cho mã tác giả", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                // Xử lý các lỗi khác nếu có
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình cập nhật", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+        if (rdoTheLoai.isSelected()) {
+            try {
+                // Lấy thông tin từ giao diện người dùng
+                int maTheLoai = Integer.parseInt(txtMaThuocTinh.getText());
+                String tenTheLoai = txtTen.getText();
+
+                // Tạo đối tượng TacGia với thông tin cập nhật
+                TheLoai theLoaiToUpdate = new TheLoai();
+                theLoaiToUpdate.setMaTheLoai(maTheLoai);
+                theLoaiToUpdate.setTen(tenTheLoai);
+                // Thực hiện cập nhật thông tin trong cơ sở dữ liệu
+                theLoaiController.updateTheLoai(theLoaiToUpdate);
+                loadTheLoaiToTable();
+                txtMaThuocTinh.setText("");
+                txtTen.setText("");
+                txtTieuSu.setText("");
+                // Hiển thị thông báo thành công
+                JOptionPane.showMessageDialog(this, "Cập nhật thông tin thể loại thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+                // Các bước bổ sung sau khi cập nhật, như làm mới hiển thị, load lại dữ liệu, v.v.
+                // ...
+            } catch (NumberFormatException ex) {
+                // Xử lý nếu có lỗi định dạng số
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập định dạng số hợp lệ cho mã thể loại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                // Xử lý các lỗi khác nếu có
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình cập nhật", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
@@ -1310,6 +1378,47 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_tblThuocTinhMouseClicked
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            // Lấy ID của sản phẩm cần cập nhật
+            int maSPToUpdate = Integer.parseInt(txtMaSP.getText());
+
+            // Kiểm tra xem ID có hợp lệ không
+            if (maSPToUpdate <= 0) {
+                JOptionPane.showMessageDialog(this, "ID sản phẩm không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return; // Dừng xử lý nếu ID không hợp lệ
+            }
+
+            // Lấy thông tin mới từ giao diện người dùng
+            String tenMoi = txtTen1.getText();
+
+            // Kiểm tra xem có thông tin cần sửa không
+            if (tenMoi.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin cần sửa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Tạo một đối tượng SanPham mới với thông tin cập nhật
+            SanPham sanPhamToUpdate = new SanPham();
+            sanPhamToUpdate.setMaSP(maSPToUpdate);
+            sanPhamToUpdate.setTen(tenMoi);
+
+            // Thực hiện cập nhật
+            sanPhamController.updateSanPham(sanPhamToUpdate);
+
+            // Hiển thị thông báo thành công
+            JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+            // Các hành động bổ sung nếu cần, như làm mới hiển thị
+            loadSanPhamToTable();
+            txtMaSP.setText("");
+            txtTen1.setText("");
+        } catch (NumberFormatException e) {
+            // Xử lý trường hợp ID không phải là số hợp lệ
+            JOptionPane.showMessageDialog(this, "Định dạng ID sản phẩm không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }         // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

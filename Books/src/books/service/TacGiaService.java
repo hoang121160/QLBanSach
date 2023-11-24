@@ -74,4 +74,23 @@ public class TacGiaService {
             ex.printStackTrace();
         }
     }
+     public void updateTacGia(TacGia update) {
+        Connection conn = null;
+        try {
+            conn = DBconnect.getConnection();
+            String sql = "UPDATE TacGia SET ten = ?, tieuSu = ? WHERE MaTacGia = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, update.getTen());
+            ps.setString(2, update.getTieuSu());
+            ps.setInt(3, update.getMaTacGia());
+
+            // Thực thi câu lệnh SQL để cập nhật dữ liệu trong cơ sở dữ liệu
+            ps.executeUpdate();
+
+            // Đóng các đối tượng liên quan
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

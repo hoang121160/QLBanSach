@@ -70,4 +70,20 @@ public class TheLoaiService {
             ex.printStackTrace();
         }
     }
+     public void updateTheLoai(TheLoai update) {
+        Connection conn = null;
+        try {
+            conn = DBconnect.getConnection();
+            String sql = "UPDATE TheLoai SET ten = ? WHERE MaTheLoai = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, update.getTen());
+            ps.setInt(2, update.getMaTheLoai());
+            // Thực thi câu lệnh SQL để cập nhật dữ liệu trong cơ sở dữ liệu
+            ps.executeUpdate();
+            // Đóng các đối tượng liên quan
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

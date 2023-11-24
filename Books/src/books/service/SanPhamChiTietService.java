@@ -171,7 +171,7 @@ public class SanPhamChiTietService {
     public void addSanPhamChiTiet(SanPhamChiTiet sp) {
         try {
 
-            Connection conn = DBcontext.getConnection();
+            Connection conn = DBconnect.getConnection();
             String query = "INSERT INTO SanPhamChiTiet (maSP,MaTacGia, MaTheLoai, ten, gia, ngonNgu, soTrang, nhaXuatBan, namXuatBan, lanTaiBan)\n"
                     + "VALUES(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);

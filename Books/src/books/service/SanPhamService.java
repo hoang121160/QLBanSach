@@ -58,4 +58,18 @@ public class SanPhamService {
             e.printStackTrace();
         }
     }
+     public void updateSanPham(SanPham sanPhamToUpdate) {
+            Connection conn = null;
+            try {
+                conn = DBconnect.getConnection();
+                String sql = "UPDATE SanPham SET ten = ? WHERE maSP = ?";
+                PreparedStatement ps = conn.prepareStatement(sql);
+                ps.setString(1, sanPhamToUpdate.getTen());
+                ps.setInt(2, sanPhamToUpdate.getMaSP());
+                ps.executeUpdate();
+                ps.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 }
