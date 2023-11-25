@@ -17,7 +17,8 @@ import java.util.List;
  * @author Admin
  */
 public class SanPhamService {
-      private List<SanPham> sanPham;
+
+    private List<SanPham> sanPham;
 
     public SanPhamService() {
         sanPham = new ArrayList<>();
@@ -42,6 +43,7 @@ public class SanPhamService {
         }
         return null;
     }
+
     public void addSanPham(SanPham sanPham) {
         Connection conn = DBconnect.getConnection();
         String sql = "INSERT INTO SanPham (ten) VALUES (?)";
@@ -58,18 +60,34 @@ public class SanPhamService {
             e.printStackTrace();
         }
     }
-     public void updateSanPham(SanPham sanPhamToUpdate) {
-            Connection conn = null;
-            try {
-                conn = DBconnect.getConnection();
-                String sql = "UPDATE SanPham SET ten = ? WHERE maSP = ?";
-                PreparedStatement ps = conn.prepareStatement(sql);
-                ps.setString(1, sanPhamToUpdate.getTen());
-                ps.setInt(2, sanPhamToUpdate.getMaSP());
-                ps.executeUpdate();
-                ps.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+
+    public void updateSanPham(SanPham sanPhamToUpdate) {
+        Connection conn = null;
+        try {
+            conn = DBconnect.getConnection();
+            String sql = "UPDATE SanPham SET ten = ? WHERE maSP = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, sanPhamToUpdate.getTen());
+            ps.setInt(2, sanPhamToUpdate.getMaSP());
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public SanPham getSanPhamByTen(String tenSanPham) {
+        // Giả sử bạn có một danh sách sản phẩm có sẵn
+        List<SanPham> danhSachSanPham = getAllSanPham(); // Gọi hàm để lấy danh sách sản phẩm
+
+        // Duyệt qua danh sách để tìm sản phẩm với tên tương ứng
+        for (SanPham sanPham : danhSachSanPham) {
+            if (sanPham.getTen().equals(tenSanPham)) {
+                return sanPham; // Trả về sản phẩm tìm thấy
             }
         }
+
+        // Trả về null nếu không tìm thấy sản phẩm
+        return null;
+    }
 }

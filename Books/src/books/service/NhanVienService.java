@@ -9,14 +9,17 @@ import books.model.NhanVien;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 
 /**
  *
  * @author Admin
  */
 public class NhanVienService {
+
     public List<NhanVien> getAllNhanVien() {
         try {
             List<NhanVien> list = new ArrayList<>();
@@ -41,5 +44,56 @@ public class NhanVienService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void addNhanVien(NhanVien nv) {
+        Connection conn = DBconnect.getConnection();
+        String sql = "INSERT INTO NhanVien (ten,ngaySinh, gioiTinh, diaChi, soDienThoai, email, chucVu) VALUES (?,?,?,?,?,?,?)";
+        try {
+            // Tạo PreparedStatement
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, nv.getTen());
+            ps.setDate(2, new java.sql.Date(nv.getNgaySinh().getTime()));
+            ps.setString(3, nv.getGioiTinh());
+            ps.setString(4, nv.getDiaChi());
+            ps.setString(5, nv.getSoDienThoai());
+            ps.setString(6, nv.getEmail());
+            ps.setString(7, nv.getChucVu());
+
+            ps.executeUpdate();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateNhanVien(NhanVien update) {
+        Connection conn = null;
+        try {
+            conn = DBconnect.getConnection();
+            String sql = "UPDATE NhanVien SET ten = ?, ngaySinh = ?, gioiTinh = ?, diaChi = ?, soDienThoai = ?, email = ?, chucVu = ? WHERE maNV = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, update.getTen());
+            ps.setDate(2, new java.sql.Date(update.getNgaySinh().getTime()));
+            ps.setString(3, update.getGioiTinh());
+            ps.setString(4, update.getDiaChi());
+            ps.setString(5, update.getSoDienThoai());
+            ps.setString(6, update.getEmail());
+            ps.setString(7, update.getChucVu());
+            ps.setInt(8, update.getMaNV());
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

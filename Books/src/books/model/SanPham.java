@@ -25,6 +25,10 @@ public class SanPham {
     public SanPham() {
     }
 
+    public SanPham(int maSP) {
+        this.maSP = maSP;
+    }
+
     public SanPham(int maSP, String ten, int soLuong, BigDecimal donGia, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted) {
         this.maSP = maSP;
         this.ten = ten;
@@ -43,7 +47,7 @@ public class SanPham {
     public void setMaSP(int maSP) {
         this.maSP = maSP;
     }
-   
+
     public String getTen() {
         return ten;
     }

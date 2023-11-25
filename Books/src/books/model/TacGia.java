@@ -102,9 +102,16 @@ public class TacGia {
     public void setTenTacGia(String tenTacGia) {
         this.ten = tenTacGia;
     }
-     @Override
+
+    @Override
     public String toString() {
         return ten;
     }
+
+    public TacGia(int maTacGia) {
+        this.maTacGia = maTacGia;
+    }
+   
+   
 
 }
