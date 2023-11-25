@@ -61,7 +61,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
                 hd.getMaKH(),
                 hd.getCreateAt(),
                 hd.getUpdateAt(),
-                hd.getMaNV(),
+                hd.getThanhTien(),
                 hd.getMaNV(),
                 hd.getTenNguoiNhan(),
                 hd.getDiaChiNhan(),
@@ -79,8 +79,8 @@ public class ViewHoaDon extends javax.swing.JPanel {
             dtm.addRow(new Object[]{
                 hdct.getMaSPCT(),
                 hdct.getTenSp(),
-                hdct.getTenSp(),
-                hdct.getThanhTien(),
+                hdct.getTheLoai(),
+                hdct.getTacGia(),               
                 hdct.getSoLuong(),
                 hdct.getDonGia(),
                 hdct.getThanhTien(),
@@ -92,19 +92,16 @@ public class ViewHoaDon extends javax.swing.JPanel {
     }
     public void showData1(List<HoaDon> ds) {
         modelTaiquay.setRowCount(0);
-
+            int stt=1;
         for (HoaDon hd : ds) {
             modelTaiquay.addRow(new Object[]{
-                hd.getMaHD(),
+                stt++,               
                 hd.getMaHD(),
                 hd.getCreateAt(),
                 hd.getUpdateAt(),
+                hd.getThanhTien(),
                 hd.getMaNV(),
-                hd.getMaNV(),
-                hd.getTenNguoiNhan(),
-                hd.getDiaChiNhan(),
-                hd.getSoDienThoai(),
-                hd.getHinhThucThanhToan(),
+                hd.getTenNguoiNhan(),              
                 hd.getTrangThai(),});
 
         }
@@ -116,8 +113,8 @@ public class ViewHoaDon extends javax.swing.JPanel {
             model1.addRow(new Object[]{
                 hdct.getMaSPCT(),
                 hdct.getTenSp(),
-                hdct.getTenSp(),
-                hdct.getThanhTien(),
+                hdct.getTheLoai(),
+                hdct.getTacGia(),
                 hdct.getSoLuong(),
                 hdct.getDonGia(),
                 hdct.getThanhTien(),

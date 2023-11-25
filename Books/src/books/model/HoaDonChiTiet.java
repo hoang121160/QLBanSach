@@ -25,11 +25,13 @@ public class HoaDonChiTiet {
     private LocalDateTime updateAt;
     private String updateBy;
     private boolean deleted;
+    private String theLoai;
+    private String tacGia;
 
     public HoaDonChiTiet() {
     }
 
-    public HoaDonChiTiet(int maHDCT, int maHD, int maSPCT, String tenSp, String trangThai, int soLuong, BigDecimal donGia, BigDecimal thanhTien, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted) {
+    public HoaDonChiTiet(int maHDCT, int maHD, int maSPCT, String tenSp, String trangThai, int soLuong, BigDecimal donGia, BigDecimal thanhTien, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted, String theLoai, String tacGia) {
         this.maHDCT = maHDCT;
         this.maHD = maHD;
         this.maSPCT = maSPCT;
@@ -43,7 +45,27 @@ public class HoaDonChiTiet {
         this.updateAt = updateAt;
         this.updateBy = updateBy;
         this.deleted = deleted;
+        this.theLoai = theLoai;
+        this.tacGia = tacGia;
     }
+
+    public String getTheLoai() {
+        return theLoai;
+    }
+
+    public void setTheLoai(String theLoai) {
+        this.theLoai = theLoai;
+    }
+
+    public String getTacGia() {
+        return tacGia;
+    }
+
+    public void setTacGia(String tacGia) {
+        this.tacGia = tacGia;
+    }
+
+   
 
     public int getMaHDCT() {
         return maHDCT;

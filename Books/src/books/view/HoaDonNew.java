@@ -6,9 +6,12 @@ package books.view;
 
 import books.controller.HoaDonChiTietController;
 import books.controller.SanPhamChiTietController;
+import books.model.HoaDon;
 import books.model.HoaDonChiTiet;
 import books.model.SanPhamChiTiet;
 import books.service.HoaDonChiTietService;
+import books.service.HoaDonService;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,6 +20,9 @@ import javax.swing.table.DefaultTableModel;
  * @author Admin
  */
 public class HoaDonNew extends javax.swing.JPanel {
+    DefaultTableModel model = new  DefaultTableModel();
+    List<HoaDon> dshoaHoaDons = new ArrayList<>();
+    HoaDonService serviceHoaDon = new HoaDonService();
 
     /**
      * Creates new form HoaDonNew
@@ -30,6 +36,9 @@ public class HoaDonNew extends javax.swing.JPanel {
         sanPhamChiTietController = new SanPhamChiTietController();
         loadHoaDonChiTietToTable();
         loadSanPhamChiTietToTable();
+        model = (DefaultTableModel) hoaDonTbl.getModel();
+        dshoaHoaDons=serviceHoaDon.getAll();
+        loadHoaDonLenTalbe(dshoaHoaDons);
     }
 
     public void loadHoaDonChiTietToTable() {
@@ -66,6 +75,22 @@ public class HoaDonNew extends javax.swing.JPanel {
             dtm.addRow(rowData);
         }
     }
+    public void loadHoaDonLenTalbe(List<HoaDon> ds) {
+        model.setRowCount(0);
+        int stt= 1;
+        for (HoaDon hd : ds) {
+            model.addRow(new Object[]{
+                stt++,
+                hd.getMaHD(),
+                hd.getNhanVien(),
+                hd.getTenNguoiNhan(),
+                hd.getTrangThai(),
+                hd.getCreateAt(),
+            });
+            
+        }
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -84,7 +109,7 @@ public class HoaDonNew extends javax.swing.JPanel {
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel10 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        hoaDonTbl = new javax.swing.JTable();
         jTabbedPane3 = new javax.swing.JTabbedPane();
         jPanel11 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -155,7 +180,7 @@ public class HoaDonNew extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(jList1);
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        hoaDonTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -166,7 +191,7 @@ public class HoaDonNew extends javax.swing.JPanel {
                 "STT", "Mã hóa đơn", "Tên nhân viên", "Tên khách hàng", "Trạng thái", "Ngày tạo"
             }
         ));
-        jScrollPane4.setViewportView(jTable3);
+        jScrollPane4.setViewportView(hoaDonTbl);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -627,6 +652,7 @@ public class HoaDonNew extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable hoaDonTbl;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -678,7 +704,6 @@ public class HoaDonNew extends javax.swing.JPanel {
     private javax.swing.JTabbedPane jTabbedPane6;
     private javax.swing.JTabbedPane jTabbedPane7;
     private javax.swing.JTabbedPane jTabbedPane8;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;

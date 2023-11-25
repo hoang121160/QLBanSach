@@ -25,8 +25,10 @@ public class HoaDon {
     private LocalDateTime updateAt;
     private String updateBy;
     private Boolean deleted;
+    private String thanhTien;
+    private String NhanVien;
 
-    public HoaDon(int maHD, int maKH, int maNV, String tenNguoiNhan, String diaChiNhan, String soDienThoai, int soLuong, String hinhThucThanhToan, String trangThai, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, Boolean deleted) {
+    public HoaDon(int maHD, int maKH, int maNV, String tenNguoiNhan, String diaChiNhan, String soDienThoai, int soLuong, String hinhThucThanhToan, String trangThai, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, Boolean deleted, String thanhTien, String NhanVien) {
         this.maHD = maHD;
         this.maKH = maKH;
         this.maNV = maNV;
@@ -41,7 +43,29 @@ public class HoaDon {
         this.updateAt = updateAt;
         this.updateBy = updateBy;
         this.deleted = deleted;
+        this.thanhTien = thanhTien;
+        this.NhanVien = NhanVien;
     }
+
+    public String getNhanVien() {
+        return NhanVien;
+    }
+
+    public void setNhanVien(String NhanVien) {
+        this.NhanVien = NhanVien;
+    }
+
+    
+
+    public String getThanhTien() {
+        return thanhTien;
+    }
+
+    public void setThanhTien(String thanhTien) {
+        this.thanhTien = thanhTien;
+    }
+
+    
 
     public HoaDon() {
     }
