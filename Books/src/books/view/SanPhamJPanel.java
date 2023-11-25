@@ -8,7 +8,9 @@ import books.controller.TheLoaiController;
 import books.model.TacGia;
 import books.model.TheLoai;
 import books.model.SanPhamChiTiet;
+import java.math.BigDecimal;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -44,23 +46,93 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
 //        loadTheLoaiToTable();
 //        loadTacGiaToTable();
-        List<TheLoai> theLoaiList = theLoaiController.getAllTheLoai();
-        for (TheLoai theLoai : theLoaiList) {
-            cboTheLoai.addItem(theLoai.getTen());
-        }
-        List<TacGia> tacGiaList = tacGiaController.getAllTacGia();
-        for (TacGia tacGia : tacGiaList) {
-            cboTacGia.addItem(tacGia.getTen());
-        }
-        List<SanPham> sanPhamList = sanPhamController.getAllSanPham();
-        for (SanPham sanPham : sanPhamList) {
-            cboTenSanPham.addItem(sanPham.getTen());
-        }
+//        List<TheLoai> theLoaiList = theLoaiController.getAllTheLoai();
+//        for (TheLoai theLoai : theLoaiList) {
+//            cboTheLoai.addItem(theLoai.getTen());
+//        }
+//        List<TacGia> tacGiaList = tacGiaController.getAllTacGia();
+//        for (TacGia tacGia : tacGiaList) {
+//            cboTacGia.addItem(tacGia.getTen());
+//        }
+//        List<SanPham> sanPhamList = sanPhamController.getAllSanPham();
+//        for (SanPham sanPham : sanPhamList) {
+//            cboTenSanPham.addItem(sanPham.getTen());
+//        }
 //        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietController.getAllSanPhamChiTiet();
 //        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList) {
 //            cboTenSPCT.addItem(sanPhamChiTiet.getTen());
 //        }
+        updateTheLoaiComboBox();
+        updateTacGiaComboBox();
+        updateSanPhamComboBox();
+    }
 
+    private void updateCboTenSanPham(int maSP) {
+        // Sử dụng maSP để lấy tên sản phẩm từ cơ sở dữ liệu hoặc nơi khác
+        String tenSanPham = getTenSanPhamFromDatabase(maSP); // Thay bằng cách lấy tên từ nguồn dữ liệu thích hợp
+
+        // Đặt giá trị vào cboTenSanPham
+        cboTenSanPham.setSelectedItem(tenSanPham);
+    }
+
+// Mô phỏng việc lấy tên sản phẩm từ cơ sở dữ liệu
+    private String getTenSanPhamFromDatabase(int maSP) {
+        List<SanPham> danhSachSanPham = sanPhamController.getAllSanPham();
+        for (SanPham sp : danhSachSanPham) {
+            if (sp.getMaSP() == maSP) {
+                return sp.getTen();
+            }
+        }
+
+        return null; // Trong trường hợp không tìm thấy
+    }
+
+    private void updateTheLoaiComboBox() {
+        // Lấy danh sách thể loại từ cơ sở dữ liệu hoặc nơi khác
+        List<TheLoai> danhSachTheLoai = theLoaiController.getAllTheLoai();
+
+        // Tạo model mới chứa các chuỗi (ví dụ: tên thể loại)
+        DefaultComboBoxModel<String> modelTheLoai = new DefaultComboBoxModel<>();
+
+        // Thêm các giá trị vào model
+        for (TheLoai theLoai : danhSachTheLoai) {
+            modelTheLoai.addElement(theLoai.getTen()); // Thay "getTenTheLoai()" bằng phương thức thích hợp
+        }
+
+        // Gán model mới cho combobox
+        cboTheLoai.setModel(modelTheLoai);
+    }
+
+    private void updateTacGiaComboBox() {
+        // Lấy danh sách thể loại từ cơ sở dữ liệu hoặc nơi khác
+        List<TacGia> danhSachTacGia = tacGiaController.getAllTacGia();
+
+        // Tạo model mới chứa các chuỗi (ví dụ: tên thể loại)
+        DefaultComboBoxModel<String> modelTacGia = new DefaultComboBoxModel<>();
+
+        // Thêm các giá trị vào model
+        for (TacGia tacGia : danhSachTacGia) {
+            modelTacGia.addElement(tacGia.getTen()); // Thay "getTenTheLoai()" bằng phương thức thích hợp
+        }
+
+        // Gán model mới cho combobox
+        cboTacGia.setModel(modelTacGia);
+    }
+
+    private void updateSanPhamComboBox() {
+        // Lấy danh sách thể loại từ cơ sở dữ liệu hoặc nơi khác
+        List<SanPham> danhSachSanPham = sanPhamController.getAllSanPham();
+
+        // Tạo model mới chứa các chuỗi (ví dụ: tên thể loại)
+        DefaultComboBoxModel<String> modelSanPham = new DefaultComboBoxModel<>();
+
+        // Thêm các giá trị vào model
+        for (SanPham sanPham : danhSachSanPham) {
+            modelSanPham.addElement(sanPham.getTen());
+        }
+
+        // Gán model mới cho combobox
+        cboTenSanPham.setModel(modelSanPham);
     }
 
     public void loadSanPhamChiTietToTable() {
@@ -93,6 +165,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         txtMaSPCT.setText(tblModel.getValueAt(i, 2).toString());
         cboTacGia.setSelectedItem(tblModel.getValueAt(i, 3).toString());
         cboTheLoai.setSelectedItem(tblModel.getValueAt(i, 4).toString());
+        cboTenSanPham.setSelectedItem(tblModel.getValueAt(i, 1).toString());
         txtTenSPCT.setText(tblModel.getValueAt(i, 5).toString());
         txtGia.setText(tblModel.getValueAt(i, 6).toString());
         txtNgonNgu.setText(tblModel.getValueAt(i, 7).toString());
@@ -544,6 +617,11 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         });
 
         jButton3.setText("Sửa");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         btbXoa.setText("Xóa");
         btbXoa.addActionListener(new java.awt.event.ActionListener() {
@@ -1101,30 +1179,105 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
 
-        SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
-        // Thiết lập thông tin cho đối tượng TacGia
         try {
-            // Gọi phương thức addTacGia từ TacGiaController
-            sanPhamChiTietController.addSanPhamChiTiet(sanPhamChiTiet);
-            // Thông báo thành công
-            JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-            // Sau khi thêm tác giả thành công, cập nhật combobox cboTacGia
-            // Xóa dữ liệu trên các trường nhập liệu
+            // Lấy mã tác giả từ JComboBox
+            String tenTacGia = cboTacGia.getSelectedItem().toString();
+
+            // Lấy tên thể loại từ JComboBox
+            String tenTheLoai = cboTheLoai.getSelectedItem().toString();
+
+            // Lấy tên sản phẩm từ JComboBox
+            String tenSanPham = cboTenSanPham.getSelectedItem().toString();
+
+            // Tìm đối tượng TacGia có tên phù hợp
+            List<TacGia> danhSachTacGia = tacGiaController.getAllTacGia();
+            TacGia selectedTacGia = null;
+            for (TacGia tacGia : danhSachTacGia) {
+                if (tacGia.getTen().equals(tenTacGia)) {
+                    selectedTacGia = tacGia;
+                    break;
+                }
+            }
+
+            // Tìm đối tượng TheLoai có tên phù hợp
+            List<TheLoai> danhSachTheLoai = theLoaiController.getAllTheLoai();
+            TheLoai selectedTheLoai = null;
+            for (TheLoai theLoai : danhSachTheLoai) {
+                if (theLoai.getTen().equals(tenTheLoai)) {
+                    selectedTheLoai = theLoai;
+                    break;
+                }
+            }
+
+            // Tìm đối tượng SanPham có tên phù hợp
+            List<SanPham> danhSachSanPham = sanPhamController.getAllSanPham();
+            SanPham selectedSanPham = null;
+            for (SanPham sanPham : danhSachSanPham) {
+                if (sanPham.getTen().equals(tenSanPham)) {
+                    selectedSanPham = sanPham;
+                    break;
+                }
+            }
+
+            // Kiểm tra xem đã chọn các giá trị hợp lệ chưa
+            if (selectedTacGia == null || selectedTheLoai == null || selectedSanPham == null) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn giá trị hợp lệ cho tác giả, thể loại và sản phẩm", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Lấy thông tin mới từ giao diện người dùng
+            String ten = txtTenSPCT.getText();
+            BigDecimal gia = new BigDecimal(txtGia.getText());
+            String ngonNgu = txtNgonNgu.getText();
+            int soTrang = Integer.parseInt(txtSoTrang.getText());
+            String nhaXuatBan = txtNhaXuatBan.getText();
+            int namXuatBan = Integer.parseInt(txtNamXuatBan.getText());
+            int lanTaiBan = Integer.parseInt(txtLanTaiBan.getText());
+
+            // Kiểm tra xem có thông tin cần thêm không
+            if (ten.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin cần thêm", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            int maTacGia = selectedTacGia.getMaTacGia();
+            int maTheLoai = selectedTheLoai.getMaTheLoai();
+            int maSanPham = selectedSanPham.getMaSP();
+            // Tạo một đối tượng SanPhamChiTiet mới
+            SanPhamChiTiet newSanPhamChiTiet = new SanPhamChiTiet();
+            newSanPhamChiTiet.setTacGia(new TacGia(maTacGia));
+            newSanPhamChiTiet.setTheLoai(new TheLoai(maTheLoai));
+            newSanPhamChiTiet.setSanPham(new SanPham(maSanPham));
+            newSanPhamChiTiet.setTen(ten);
+            newSanPhamChiTiet.setGia(gia);
+            newSanPhamChiTiet.setNgonNgu(ngonNgu);
+            newSanPhamChiTiet.setSoTrang(soTrang);
+            newSanPhamChiTiet.setNhaXuatBan(nhaXuatBan);
+            newSanPhamChiTiet.setNamXuatBan(namXuatBan);
+            newSanPhamChiTiet.setLanTaiBan(lanTaiBan);
+
+            // Thực hiện thêm mới
+            sanPhamChiTietController.addSanPhamChiTiet(newSanPhamChiTiet);
+
+            // Hiển thị thông báo thành công
+            JOptionPane.showMessageDialog(this, "Thêm sản phẩm chi tiết thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+            // Các hành động bổ sung nếu cần, như làm mới hiển thị
+            loadSanPhamChiTietToTable();
             txtMaSanPham.setText("");
             txtMaSPCT.setText("");
+            txtTenSPCT.setText("");
             txtGia.setText("");
             txtNgonNgu.setText("");
             txtSoTrang.setText("");
             txtNhaXuatBan.setText("");
             txtNamXuatBan.setText("");
             txtLanTaiBan.setText("");
-            txtTenSPCT.setText("");
-            loadSanPhamToTable();
-        } catch (Exception ex) {
-            // Xử lý ngoại lệ khi thêm tác giả thất bại
-            JOptionPane.showMessageDialog(this, "Thêm sản phẩm thất bại: " + ex.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
-        }         //        addSanPhamChiTiet();
-        //        loadSanPhamChiTietToTable();
+
+        } catch (ClassCastException e) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn giá trị hợp lệ cho tác giả, thể loại và sản phẩm", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Định dạng giá trị không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnThemActionPerformed
 
     private void btbXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbXoaActionPerformed
@@ -1132,12 +1285,22 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         int selectedRow = tblSPCT.getSelectedRow();
 
         if (selectedRow >= 0) {
-            dtm.removeRow(selectedRow);
+            int maSPCT = (int) tblSPCT.getValueAt(selectedRow, 2);
+            sanPhamChiTietController.deleteSanPhamChiTiet(maSPCT);
+            loadSanPhamChiTietToTable();
+            txtMaSanPham.setText("");
+            txtMaSPCT.setText("");
+            txtTenSPCT.setText("");
+            txtGia.setText("");
+            txtNgonNgu.setText("");
+            txtSoTrang.setText("");
+            txtNhaXuatBan.setText("");
+            txtNamXuatBan.setText("");
+            txtLanTaiBan.setText("");
             JOptionPane.showMessageDialog(this, "Xóa thành công!");
         } else {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một dòng để xóa!");
         }
-        // TODO add your handling code here:
     }//GEN-LAST:event_btbXoaActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -1160,6 +1323,11 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         int selectedRow = tblSPCT.getSelectedRow();
         if (selectedRow != -1) {
             selectRow(selectedRow);
+            // Lấy mã sản phẩm từ cột thứ 2 (index 1) của dòng được chọn
+            int maSP = Integer.parseInt(tblSPCT.getValueAt(selectedRow, 1).toString());
+
+            // Cập nhật cboTenSanPham dựa trên mã sản phẩm
+            updateCboTenSanPham(maSP);
         }
     }//GEN-LAST:event_tblSPCTCTMouseClicked
 
@@ -1254,7 +1422,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnThemTGActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-if (rdoTacGia.isSelected()) {
+        if (rdoTacGia.isSelected()) {
             try {
                 // Lấy thông tin từ giao diện người dùng
                 int maTacGia = Integer.parseInt(txtMaThuocTinh.getText());
@@ -1419,6 +1587,67 @@ if (rdoTacGia.isSelected()) {
             JOptionPane.showMessageDialog(this, "Định dạng ID sản phẩm không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        try {
+            // Lấy ID của sản phẩm chi tiết cần cập nhật
+            int maSPCTToUpdate = Integer.parseInt(txtMaSPCT.getText());
+
+            // Kiểm tra xem ID có hợp lệ không
+            if (maSPCTToUpdate <= 0) {
+                JOptionPane.showMessageDialog(this, "ID sản phẩm chi tiết không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return; // Dừng xử lý nếu ID không hợp lệ
+            }
+
+            // Lấy thông tin mới từ giao diện người dùng
+            String tenMoi = txtTenSPCT.getText();
+            BigDecimal giaMoi = new BigDecimal(txtGia.getText()); // You may need additional validation for the BigDecimal value
+            String ngonNguMoi = txtNgonNgu.getText();
+            int soTrangMoi = Integer.parseInt(txtSoTrang.getText()); // You may need additional validation for the Integer value
+            String nhaXuatBanMoi = txtNhaXuatBan.getText();
+            int namXuatBanMoi = Integer.parseInt(txtNamXuatBan.getText()); // You may need additional validation for the Integer value
+            int lanTaiBanMoi = Integer.parseInt(txtLanTaiBan.getText()); // You may need additional validation for the Integer value
+
+            // Kiểm tra xem có thông tin cần sửa không
+            if (tenMoi.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập thông tin cần sửa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Tạo một đối tượng SanPhamChiTiet mới với thông tin cập nhật
+            SanPhamChiTiet sanPhamChiTietToUpdate = new SanPhamChiTiet();
+            sanPhamChiTietToUpdate.setMaSPCT(maSPCTToUpdate);
+            sanPhamChiTietToUpdate.setTen(tenMoi);
+            sanPhamChiTietToUpdate.setGia(giaMoi);
+            sanPhamChiTietToUpdate.setNgonNgu(ngonNguMoi);
+            sanPhamChiTietToUpdate.setSoTrang(soTrangMoi);
+            sanPhamChiTietToUpdate.setNhaXuatBan(nhaXuatBanMoi);
+            sanPhamChiTietToUpdate.setNamXuatBan(namXuatBanMoi);
+            sanPhamChiTietToUpdate.setLanTaiBan(lanTaiBanMoi);
+
+            // Thực hiện cập nhật
+            sanPhamChiTietController.updateSanPhamChiTiet(sanPhamChiTietToUpdate);
+
+            // Hiển thị thông báo thành công
+            JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm chi tiết thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+            // Các hành động bổ sung nếu cần, như làm mới hiển thị
+            loadSanPhamChiTietToTable();
+            txtMaSanPham.setText("");
+            txtMaSPCT.setText("");
+            txtTenSPCT.setText("");
+            txtGia.setText("");
+            txtNgonNgu.setText("");
+            txtSoTrang.setText("");
+            txtNhaXuatBan.setText("");
+            txtNamXuatBan.setText("");
+            txtLanTaiBan.setText("");
+
+        } catch (NumberFormatException e) {
+            // Xử lý trường hợp ID hoặc các giá trị không phải là số hợp lệ
+            JOptionPane.showMessageDialog(this, "Định dạng ID hoặc giá trị không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

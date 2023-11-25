@@ -13,6 +13,7 @@ import java.util.List;
  * @author Admin
  */
 public class SanPhamController {
+
     private SanPhamService service;
 
     public SanPhamController() {
@@ -22,15 +23,18 @@ public class SanPhamController {
     public List<SanPham> getAllSanPham() {
         return service.getAllSanPham();
     }
+
     public void addSanPham(SanPham sanPham) {
-        // Thực hiện logic để thêm tác giả vào cơ sở dữ liệu
-        // Ví dụ: Gọi phương thức trong service để thêm tác giả
+
         service.addSanPham(sanPham);
     }
-    public void updateSanPham(SanPham sanPhamToUpdate){
+
+    public void updateSanPham(SanPham sanPhamToUpdate) {
         service.updateSanPham(sanPhamToUpdate);
     }
-//    public void deleteSanPham(int maSanPham){
-//        service.deleteSanPham(maSanPham);
-//    }
+
+    public SanPham getSanPhamByTen(String tenSanPham) {
+        return service.getSanPhamByTen(tenSanPham);
+
+    }
 }

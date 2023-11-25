@@ -335,6 +335,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="L&#xe0;m m&#x1edb;i"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton3">
                   <Properties>
@@ -348,6 +351,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="S&#x1eed;a "/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -379,8 +385,8 @@
                               <Component id="txtEmail" min="-2" pref="183" max="-2" attributes="0"/>
                               <Component id="txtSDT" min="-2" pref="183" max="-2" attributes="0"/>
                               <Component id="txtDiaChi" min="-2" pref="183" max="-2" attributes="0"/>
-                              <Component id="txtNgaySinhNV" min="-2" pref="183" max="-2" attributes="0"/>
-                              <Component id="txtTenNV" min="-2" pref="183" max="-2" attributes="0"/>
+                              <Component id="txtNgaySinh" min="-2" pref="183" max="-2" attributes="0"/>
+                              <Component id="txtTen" min="-2" pref="183" max="-2" attributes="0"/>
                               <Component id="txtMaNV" min="-2" pref="183" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
                                   <Component id="rdoNam" min="-2" max="-2" attributes="0"/>
@@ -402,12 +408,12 @@
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txtTenNV" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtTen" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txtNgaySinhNV" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtNgaySinh" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
@@ -454,14 +460,14 @@
                     <Property name="editable" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtTenNV">
+                <Component class="javax.swing.JTextField" name="txtTen">
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTenNVActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtTenActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtNgaySinhNV">
+                <Component class="javax.swing.JTextField" name="txtNgaySinh">
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNgaySinhNVActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNgaySinhActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txtDiaChi">

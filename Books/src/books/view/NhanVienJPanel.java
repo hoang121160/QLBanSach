@@ -6,7 +6,11 @@ package books.view;
 
 import books.model.NhanVien;
 import books.service.NhanVienService;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -47,8 +51,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     private void loadNhanVienToTextBoxes(int i) {
         NhanVien nv = new NhanVien();
         txtMaNV.setText(tblNhanVien.getValueAt(i, 0).toString());
-        txtTenNV.setText(tblNhanVien.getValueAt(i, 1).toString());
-        txtNgaySinhNV.setText(tblNhanVien.getValueAt(i, 2).toString());
+        txtTen.setText(tblNhanVien.getValueAt(i, 1).toString());
+        txtNgaySinh.setText(tblNhanVien.getValueAt(i, 2).toString());
         String gioiTinh = tblNhanVien.getValueAt(i, 3).toString();
         if ("Nam".equals(gioiTinh)) {
             rdoNam.setSelected(true);
@@ -97,8 +101,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         jPanel5 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         txtMaNV = new javax.swing.JTextField();
-        txtTenNV = new javax.swing.JTextField();
-        txtNgaySinhNV = new javax.swing.JTextField();
+        txtTen = new javax.swing.JTextField();
+        txtNgaySinh = new javax.swing.JTextField();
         txtDiaChi = new javax.swing.JTextField();
         txtSDT = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
@@ -207,6 +211,11 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         jButton5.setText("Xóa");
 
         jButton2.setText("Làm mới");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Thêm");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -216,6 +225,11 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         });
 
         jButton4.setText("Sửa ");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -252,15 +266,15 @@ public class NhanVienJPanel extends javax.swing.JPanel {
 
         txtMaNV.setEditable(false);
 
-        txtTenNV.addActionListener(new java.awt.event.ActionListener() {
+        txtTen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtTenNVActionPerformed(evt);
+                txtTenActionPerformed(evt);
             }
         });
 
-        txtNgaySinhNV.addActionListener(new java.awt.event.ActionListener() {
+        txtNgaySinh.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNgaySinhNVActionPerformed(evt);
+                txtNgaySinhActionPerformed(evt);
             }
         });
 
@@ -327,8 +341,8 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtSDT, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtDiaChi, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNgaySinhNV, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTenNV, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtMaNV, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(rdoNam)
@@ -345,11 +359,11 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtTenNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtNgaySinhNV, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNgaySinh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -484,20 +498,70 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        try {
+            // Lấy thông tin từ giao diện người dùng
+            String tenNhanVien = txtTen.getText();
+            String ngaySinhText = txtNgaySinh.getText();
+
+            // Replace "dd/MM/yyyy" with your actual date format
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date ngaySinh = dateFormat.parse(ngaySinhText);
+            String gioiTinh = rdoNam.isSelected() ? "Nam" : "Nữ";
+            String diaChi = txtDiaChi.getText();
+            String soDienThoai = txtSDT.getText(); // Assuming you have a text field for soDienThoai
+            String email = txtEmail.getText(); // Assuming you have a text field for email
+            String chucVu = txtChucVu.getText();
+
+            // Kiểm tra các trường không được trống
+            if (tenNhanVien.isEmpty() || gioiTinh.isEmpty() || diaChi.isEmpty() || soDienThoai.isEmpty() || email.isEmpty() || chucVu.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin nhân viên!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return; // Dừng việc thêm nhân viên nếu trường rỗng
+            }
+
+            // Tạo đối tượng NhanVien
+            NhanVien nhanVien = new NhanVien();
+            nhanVien.setTen(tenNhanVien);
+            nhanVien.setNgaySinh(ngaySinh);
+            nhanVien.setGioiTinh(gioiTinh);
+            nhanVien.setDiaChi(diaChi);
+            nhanVien.setSoDienThoai(soDienThoai);
+            nhanVien.setEmail(email);
+            nhanVien.setChucVu(chucVu);
+
+            // Gọi phương thức addNhanVien từ NhanVienController hoặc làm thêm các xử lý cần thiết
+            service.addNhanVien(nhanVien);
+
+            // Thông báo thành công
+            JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            // Xóa dữ liệu trên các trường nhập liệu
+            txtTen.setText("");
+            txtNgaySinh.setText("");
+            txtDiaChi.setText("");
+            txtSDT.setText("");
+            txtEmail.setText("");
+            txtChucVu.setText("");
+            txtMaNV.setText("");
+            rdoNam.setSelected(false);
+            rdoNu.setSelected(false);
+            loadNhanVienToTable();
+        } catch (Exception ex) {
+            // Xử lý ngoại lệ khi thêm nhân viên thất bại
+            JOptionPane.showMessageDialog(this, "Thêm nhân viên thất bại: " + ex.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton14ActionPerformed
 
-    private void txtTenNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenNVActionPerformed
+    private void txtTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtTenNVActionPerformed
+    }//GEN-LAST:event_txtTenActionPerformed
 
-    private void txtNgaySinhNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNgaySinhNVActionPerformed
+    private void txtNgaySinhActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNgaySinhActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtNgaySinhNVActionPerformed
+    }//GEN-LAST:event_txtNgaySinhActionPerformed
 
     private void txtDiaChiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDiaChiActionPerformed
         // TODO add your handling code here:
@@ -521,6 +585,69 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             loadNhanVienToTextBoxes(selectedRow);
         }        // TODO add your handling code here:
     }//GEN-LAST:event_tblNhanVienMouseClicked
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            int maNV = Integer.parseInt(txtMaNV.getText());
+            String tenNV = txtTen.getText();
+            Date ngaySinh = new SimpleDateFormat("dd/MM/yyyy").parse(txtNgaySinh.getText());
+            String gioiTinh = rdoNam.isSelected() ? "Nam" : "Nữ";
+            String diaChi = txtDiaChi.getText();
+            String soDienThoai = txtSDT.getText();
+            String email = txtEmail.getText();
+            String chucVu = txtChucVu.getText();
+
+            // Create a NhanVien object with the updated information
+            NhanVien nhanVienToUpdate = new NhanVien();
+            nhanVienToUpdate.setMaNV(maNV);
+            nhanVienToUpdate.setTen(tenNV);
+            nhanVienToUpdate.setNgaySinh(ngaySinh);
+            nhanVienToUpdate.setGioiTinh(gioiTinh);
+            nhanVienToUpdate.setDiaChi(diaChi);
+            nhanVienToUpdate.setSoDienThoai(soDienThoai);
+            nhanVienToUpdate.setEmail(email);
+            nhanVienToUpdate.setChucVu(chucVu);
+            if (tenNV.isEmpty() || gioiTinh.isEmpty() || diaChi.isEmpty() || soDienThoai.isEmpty() || email.isEmpty() || chucVu.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin nhân viên!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return; // Dừng việc thêm nhân viên nếu trường rỗng
+            }
+            if (!rdoNam.isSelected() && !rdoNu.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn giới tính", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            service.updateNhanVien(nhanVienToUpdate);
+            loadNhanVienToTable();
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Clear the input fields
+            txtMaNV.setText("");
+            txtTen.setText("");
+            txtNgaySinh.setText("");
+            rdoNam.setSelected(false);
+            rdoNu.setSelected(false);
+            txtDiaChi.setText("");
+            txtSDT.setText("");
+            txtEmail.setText("");
+            txtChucVu.setText("");
+
+        } catch (NumberFormatException ex) {
+            // Handle if there is a number format exception
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập định dạng số hợp lệ cho mã nhân viên", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (ParseException ex) {
+            // Handle if there is a date parsing exception
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập định dạng ngày hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            // Handle other exceptions
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình cập nhật", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        loadNhanVienToTable();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -558,9 +685,9 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtDiaChi;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMaNV;
-    private javax.swing.JTextField txtNgaySinhNV;
+    private javax.swing.JTextField txtNgaySinh;
     private javax.swing.JTextField txtSDT;
-    private javax.swing.JTextField txtTenNV;
+    private javax.swing.JTextField txtTen;
     // End of variables declaration//GEN-END:variables
 
 }
