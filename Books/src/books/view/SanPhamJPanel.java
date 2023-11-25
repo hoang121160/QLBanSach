@@ -335,7 +335,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jPanel7 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnChiTietSP = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jTabbedPane7 = new javax.swing.JTabbedPane();
         jPanel8 = new javax.swing.JPanel();
@@ -427,10 +427,10 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             }
         });
 
-        jButton7.setText("Chi tiết SP");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btnChiTietSP.setText("Chi tiết SP");
+        btnChiTietSP.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnChiTietSPActionPerformed(evt);
             }
         });
 
@@ -448,7 +448,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton7)
+                    .addComponent(btnChiTietSP)
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -463,7 +463,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jButton6)
                 .addGap(18, 18, 18)
-                .addComponent(jButton7)
+                .addComponent(btnChiTietSP)
                 .addGap(18, 18, 18)
                 .addComponent(jButton8)
                 .addGap(10, 10, 10))
@@ -1154,9 +1154,18 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         }        // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnChiTietSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChiTietSPActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+        int row = tblSanPham.getSelectedRow();
+            if (row != -1) {
+                // Lấy giá trị từ cột thứ 1 (index 1) của dòng được chọn
+                int maSP = (int) tblSanPham.getValueAt(row, 1);
+
+                // Tạo frame chi tiết và truyền mã sản phẩm
+                SanPhamChiTietJFrame chiTietJFrame = new SanPhamChiTietJFrame(maSP);
+                chiTietJFrame.setVisible(true);
+            }
+    }//GEN-LAST:event_btnChiTietSPActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         loadSanPhamToTable();
@@ -1652,6 +1661,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btbXoa;
+    private javax.swing.JButton btnChiTietSP;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnThemTG;
     private javax.swing.JComboBox<String> cboTacGia;
@@ -1662,7 +1672,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;

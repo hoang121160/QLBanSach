@@ -13,7 +13,8 @@ import java.util.List;
  * @author Admin
  */
 public class SanPhamChiTietController {
-     private SanPhamChiTietService sanPhamChiTietService;
+
+    private SanPhamChiTietService sanPhamChiTietService;
 
     public SanPhamChiTietController() {
         sanPhamChiTietService = new SanPhamChiTietService();
@@ -22,6 +23,7 @@ public class SanPhamChiTietController {
     public List<SanPhamChiTiet> getAllSanPhamChiTiet() {
         return sanPhamChiTietService.getAllSanPhamChiTiet();
     }
+
     public List<SanPhamChiTiet> getSanPhamChiTietByMaSP(int maSP) {
         return sanPhamChiTietService.getSanPhamChiTietByMaSP(maSP);
     }
@@ -36,5 +38,9 @@ public class SanPhamChiTietController {
 
     public void updateSanPhamChiTiet(SanPhamChiTiet sanPhamChiTiet) {
         sanPhamChiTietService.updateSanPhamChiTiet(sanPhamChiTiet);
+    }
+
+    public List<SanPhamChiTiet> findSanPhamChiTietByMaSP(int maSP) {
+        return sanPhamChiTietService.findSanPhamChiTietByMaSP(maSP);
     }
 }

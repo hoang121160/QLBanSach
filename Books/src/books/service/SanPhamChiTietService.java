@@ -145,7 +145,7 @@ public class SanPhamChiTietService {
                     + "    INNER JOIN TacGia tg ON spct.MaTacGia = tg.maTacGia\n"
                     + "    INNER JOIN TheLoai tl ON spct.MaTheLoai = tl.MaTheLoai\n"
                     + "WHERE\n"
-                    + "    spct.maSPCT = ?";
+                    + "    spct.MaSP = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, maSP);
             ResultSet rs = ps.executeQuery();
@@ -251,6 +251,52 @@ public class SanPhamChiTietService {
                 e.printStackTrace();
             }
         }
+    }
+
+    public List<SanPhamChiTiet> findSanPhamChiTietByMaSP(int maSP) {
+        List<SanPhamChiTiet> sanPhamChiTietList = new ArrayList<>();
+
+        try {
+            Connection conn = DBconnect.getConnection();
+
+            String query = "SELECT spct.maSPCT, tg.ten AS tenTacGia, tl.ten AS tenTheLoai, spct.ten, spct.gia, "
+                    + "spct.ngonNgu, spct.soTrang, spct.nhaXuatBan, spct.namXuatBan, spct.lanTaiBan "
+                    + "FROM SanPhamChiTiet spct "
+                    + "INNER JOIN TacGia tg ON spct.MaTacGia = tg.maTacGia "
+                    + "INNER JOIN TheLoai tl ON spct.MaTheLoai = tl.MaTheLoai "
+                    + "WHERE spct.maSPCT = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, maSP);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                SanPhamChiTiet spct = new SanPhamChiTiet();
+                spct.setMaSPCT(rs.getInt("maSPCT"));
+                spct.setTacGia(rs.getString("tenTacGia"));
+                spct.setTheLoai(rs.getString("tenTheLoai"));
+                spct.setTen(rs.getString("ten"));
+                spct.setGia(rs.getBigDecimal("gia"));
+                spct.setNgonNgu(rs.getString("ngonNgu"));
+                spct.setSoTrang(rs.getInt("soTrang"));
+                spct.setNhaXuatBan(rs.getString("nhaXuatBan"));
+                spct.setNamXuatBan(rs.getInt("namXuatBan"));
+                spct.setLanTaiBan(rs.getInt("lanTaiBan"));
+
+                sanPhamChiTietList.add(spct);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            // Handle SQL exceptions
+            e.printStackTrace();
+        } catch (Exception e) {
+            // Handle other exceptions
+            e.printStackTrace();
+        }
+
+        return sanPhamChiTietList;
     }
 
 }

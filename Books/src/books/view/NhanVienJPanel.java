@@ -54,22 +54,32 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         txtTen.setText(tblNhanVien.getValueAt(i, 1).toString());
         txtNgaySinh.setText(tblNhanVien.getValueAt(i, 2).toString());
         String gioiTinh = tblNhanVien.getValueAt(i, 3).toString();
-        if ("Nam".equals(gioiTinh)) {
-            rdoNam.setSelected(true);
-            rdoNu.setSelected(false);
-        } else if ("Nữ".equals(gioiTinh)) {
-            rdoNam.setSelected(false);
-            rdoNu.setSelected(true);
-        } else {
-            // Xử lý khi giới tính không hợp lệ, có thể để trạng thái mặc định hoặc làm gì đó khác.
-            rdoNam.setSelected(false);
-            rdoNu.setSelected(false);
-        }
+        rdoNam.setSelected("Nam".equals(gioiTinh));
+        rdoNu.setSelected("Nữ".equals(gioiTinh));
         txtDiaChi.setText(tblNhanVien.getValueAt(i, 4).toString());
         txtSDT.setText(tblNhanVien.getValueAt(i, 5).toString());
 
         txtEmail.setText(tblNhanVien.getValueAt(i, 6).toString());
         txtChucVu.setText(tblNhanVien.getValueAt(i, 7).toString());
+    }
+
+
+    private void updateNhanVienTable(NhanVien searchResults) {
+        DefaultTableModel model = (DefaultTableModel) tblNhanVien.getModel();
+        model.setRowCount(0);
+        if (searchResults != null) {
+            Object[] rowData = {
+                searchResults.getMaNV(),
+                searchResults.getTen(),
+                searchResults.getNgaySinh(),
+                searchResults.getGioiTinh(),
+                searchResults.getDiaChi(),
+                searchResults.getSoDienThoai(),
+                searchResults.getEmail(),
+                searchResults.getChucVu()
+            };
+            model.addRow(rowData);
+        }
     }
 
     /**
@@ -89,9 +99,9 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jTextField24 = new javax.swing.JTextField();
+        txtSearch = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
-        jButton14 = new javax.swing.JButton();
+        btbTimKiem = new javax.swing.JButton();
         jLabel29 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
@@ -166,12 +176,18 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         jPanel4.setBackground(new java.awt.Color(0, 153, 153));
         jPanel4.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
+
         jLabel30.setText("Mã nhân viên");
 
-        jButton14.setText("Tìm kiếm ");
-        jButton14.addActionListener(new java.awt.event.ActionListener() {
+        btbTimKiem.setText("Tìm kiếm ");
+        btbTimKiem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton14ActionPerformed(evt);
+                btbTimKiemActionPerformed(evt);
             }
         });
 
@@ -183,11 +199,11 @@ public class NhanVienJPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(76, 76, 76)
-                .addComponent(jButton14)
+                .addComponent(btbTimKiem)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -195,10 +211,10 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel30))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addComponent(jButton14)
+                .addComponent(btbTimKiem)
                 .addContainerGap())
         );
 
@@ -209,6 +225,11 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         jPanel6.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jButton5.setText("Xóa");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Làm mới");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -551,9 +572,23 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+    private void btbTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btbTimKiemActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton14ActionPerformed
+        try {
+            int maNV = Integer.parseInt(txtSearch.getText());
+            NhanVien searchResults = service.findNhanVienByMaNV(maNV);
+            updateNhanVienTable(searchResults);
+            if (searchResults == null) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy nhân viên với mã " + searchResults, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã nhân viên là một số nguyên", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình tìm kiếm", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btbTimKiemActionPerformed
 
     private void txtTenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTenActionPerformed
         // TODO add your handling code here:
@@ -619,7 +654,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
             service.updateNhanVien(nhanVienToUpdate);
             loadNhanVienToTable();
             JOptionPane.showMessageDialog(this, "Cập nhật thông tin nhân viên thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
-            
+
             // Clear the input fields
             txtMaNV.setText("");
             txtTen.setText("");
@@ -649,9 +684,40 @@ public class NhanVienJPanel extends javax.swing.JPanel {
         loadNhanVienToTable();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        try {
+            int maNV = Integer.parseInt(txtMaNV.getText());
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa nhân viên này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+            if (dialogResult == JOptionPane.YES_OPTION) {
+                service.deleteNhanVien(maNV);
+                loadNhanVienToTable();
+                JOptionPane.showMessageDialog(this, "Xóa nhân viên thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                txtMaNV.setText("");
+                txtTen.setText("");
+                txtNgaySinh.setText("");
+                rdoNam.setSelected(false);
+                rdoNu.setSelected(false);
+                txtDiaChi.setText("");
+                txtSDT.setText("");
+                txtEmail.setText("");
+                txtChucVu.setText("");
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập định dạng số hợp lệ cho mã nhân viên", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình xóa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton14;
+    private javax.swing.JButton btbTimKiem;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -677,7 +743,6 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField24;
     private javax.swing.JRadioButton rdoNam;
     private javax.swing.JRadioButton rdoNu;
     private javax.swing.JTable tblNhanVien;
@@ -687,6 +752,7 @@ public class NhanVienJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtMaNV;
     private javax.swing.JTextField txtNgaySinh;
     private javax.swing.JTextField txtSDT;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtTen;
     // End of variables declaration//GEN-END:variables
 
