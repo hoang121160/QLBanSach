@@ -6,7 +6,9 @@ package books.view;
 
 import books.model.KhachHang;
 import books.service.KhachHangService;
+import java.text.ParseException;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -65,6 +67,21 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         txtEmail.setText(tblKhachHang.getValueAt(i, 5).toString());
     }
 
+    private void updateKhachHangTable(KhachHang searchResults) {
+        DefaultTableModel model = (DefaultTableModel) tblKhachHang.getModel();
+        model.setRowCount(0);
+        if (searchResults != null) {
+            Object[] rowData = {
+                searchResults.getMaKH(),
+                searchResults.getTen(),
+                searchResults.getGioiTinh(),
+                searchResults.getDiaChi(),
+                searchResults.getSoDienThoai(),
+                searchResults.getEmail(),};
+            model.addRow(rowData);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,8 +112,8 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         rdoNu = new javax.swing.JRadioButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -116,6 +133,8 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
         jLabel4.setText("Mã KH");
 
+        txtMaKH.setEditable(false);
+
         jLabel5.setText("Tên");
 
         jLabel6.setText("Giới tính");
@@ -133,8 +152,18 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         jLabel9.setText("Số điện thoại");
 
         jButton2.setText("Thêm");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Sửa");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Xóa");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -236,7 +265,12 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
         jLabel1.setText("Mã khách hàng:");
 
-        jButton1.setText("Tìm kiếm");
+        btnSearch.setText("Tìm kiếm");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -246,9 +280,9 @@ public class KhachHangJPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(40, 40, 40)
-                .addComponent(jButton1)
+                .addComponent(btnSearch)
                 .addGap(50, 50, 50))
         );
         jPanel2Layout.setVerticalGroup(
@@ -256,9 +290,9 @@ public class KhachHangJPanel extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jButton1))
+                    .addComponent(btnSearch))
                 .addContainerGap())
         );
 
@@ -356,6 +390,31 @@ public class KhachHangJPanel extends javax.swing.JPanel {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        try {
+            DefaultTableModel dtm = (DefaultTableModel) tblKhachHang.getModel();
+            int selectedRow = tblKhachHang.getSelectedRow();
+            if (selectedRow >= 0) {
+                int maKH = (int) tblKhachHang.getValueAt(selectedRow, 0);
+                int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa khách hàng này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    service.deleteKhachHang(maKH);
+                    loadKhachHangToTable();
+                    JOptionPane.showMessageDialog(this, "Xóa khách hàng thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                    txtMaKH.setText("");
+                    txtTen.setText("");
+                    rdoNam.setSelected(false);
+                    rdoNu.setSelected(false);
+                    txtDiaChi.setText("");
+                    txtSDT.setText("");
+                    txtEmail.setText("");
+                }
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập định dạng số hợp lệ cho mã khách hàng", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình xóa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void tblKhachHangMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblKhachHangMouseClicked
@@ -365,9 +424,119 @@ public class KhachHangJPanel extends javax.swing.JPanel {
         }           // TODO add your handling code here:
     }//GEN-LAST:event_tblKhachHangMouseClicked
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            // Lấy thông tin từ giao diện người dùng
+            String tenKhachHang = txtTen.getText();
+            String gioiTinh = rdoNam.isSelected() ? "Nam" : "Nữ";
+            String diaChi = txtDiaChi.getText();
+            String soDienThoai = txtSDT.getText();
+            String email = txtEmail.getText();
+
+            // Kiểm tra các trường không được trống
+            if (tenKhachHang.isEmpty() || gioiTinh.isEmpty() || diaChi.isEmpty() || soDienThoai.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return; // Dừng việc thêm khách hàng nếu trường rỗng
+            }
+
+            // Tạo đối tượng KhachHang
+            KhachHang kh = new KhachHang();
+            kh.setTen(tenKhachHang);
+            kh.setGioiTinh(gioiTinh);
+            kh.setDiaChi(diaChi);
+            kh.setSoDienThoai(soDienThoai);
+            kh.setEmail(email);
+            // Gọi phương thức addKhachHang từ KhachHangController hoặc làm thêm các xử lý cần thiết
+            service.addKhachHang(kh);
+            loadKhachHangToTable();
+            // Thông báo thành công
+            JOptionPane.showMessageDialog(this, "Thêm khách hàng thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+
+            // Xóa dữ liệu trên các trường nhập liệu
+            txtTen.setText("");
+            txtDiaChi.setText("");
+            txtSDT.setText("");
+            txtEmail.setText("");
+            txtMaKH.setText("");
+            rdoNam.setSelected(false);
+            rdoNu.setSelected(false);
+
+        } catch (Exception ex) {
+            // Xử lý ngoại lệ khi thêm khách hàng thất bại
+            JOptionPane.showMessageDialog(this, "Thêm khách hàng thất bại: " + ex.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        try {
+            int maKH = Integer.parseInt(txtMaKH.getText());
+            String tenKH = txtTen.getText();
+            String gioiTinh = rdoNam.isSelected() ? "Nam" : "Nữ";
+            String diaChi = txtDiaChi.getText();
+            String soDienThoai = txtSDT.getText();
+            String email = txtEmail.getText();
+
+            // Create a KhachHang object with the updated information
+            KhachHang khachHangToUpdate = new KhachHang();
+            khachHangToUpdate.setMaKH(maKH);
+            khachHangToUpdate.setTen(tenKH);
+            khachHangToUpdate.setGioiTinh(gioiTinh);
+            khachHangToUpdate.setDiaChi(diaChi);
+            khachHangToUpdate.setSoDienThoai(soDienThoai);
+            khachHangToUpdate.setEmail(email);
+            if (tenKH.isEmpty() || gioiTinh.isEmpty() || diaChi.isEmpty() || soDienThoai.isEmpty() || email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin khách hàng!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return; // Dừng việc thêm khách hàng nếu trường rỗng
+            }
+            if (!rdoNam.isSelected() && !rdoNu.isSelected()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn giới tính", "Thông báo", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            service.updateKhachHang(khachHangToUpdate);
+            loadKhachHangToTable();
+            JOptionPane.showMessageDialog(this, "Cập nhật thông tin khách hàng thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+            // Clear the input fields
+            txtMaKH.setText("");
+            txtTen.setText("");
+            rdoNam.setSelected(false);
+            rdoNu.setSelected(false);
+            txtDiaChi.setText("");
+            txtSDT.setText("");
+            txtEmail.setText("");
+
+        } catch (NumberFormatException ex) {
+            // Handle if there is a number format exception
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập định dạng số hợp lệ cho mã khách hàng", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            // Handle other exceptions
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình cập nhật", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        try {
+            int maKH = Integer.parseInt(txtSearch.getText());
+            KhachHang searchResults = service.findKhachHangByMaKH(maKH);
+            updateKhachHangTable(searchResults);
+            if (searchResults == null) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy khách hàng với mã " + searchResults, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã khách hàng là một số nguyên", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình tìm kiếm", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnSearch;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -387,7 +556,6 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JRadioButton rdoNam;
     private javax.swing.JRadioButton rdoNu;
     private javax.swing.JTable tblKhachHang;
@@ -395,6 +563,7 @@ public class KhachHangJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMaKH;
     private javax.swing.JTextField txtSDT;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtTen;
     // End of variables declaration//GEN-END:variables
 

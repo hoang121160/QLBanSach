@@ -96,4 +96,55 @@ public class NhanVienService {
             }
         }
     }
+
+    public void deleteNhanVien(int maNV) {
+        try {
+            Connection conn = DBconnect.getConnection();
+            String query = "DELETE FROM NhanVien WHERE maNV = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, maNV);
+            ps.executeUpdate();
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public NhanVien findNhanVienByMaNV(int maNV) {
+        NhanVien nhanVien = null;
+
+        try {
+            Connection conn = DBconnect.getConnection();
+
+            String query = "SELECT * FROM NhanVien WHERE maNV = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, maNV);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nhanVien = new NhanVien();
+                nhanVien.setMaNV(rs.getInt("maNV"));
+                nhanVien.setTen(rs.getString("ten"));
+                nhanVien.setNgaySinh(rs.getDate("ngaySinh"));
+                nhanVien.setGioiTinh(rs.getString("gioiTinh"));
+                nhanVien.setDiaChi(rs.getString("diaChi"));
+                nhanVien.setSoDienThoai(rs.getString("soDienThoai"));
+                nhanVien.setEmail(rs.getString("email"));
+                nhanVien.setChucVu(rs.getString("chucVu"));
+            }
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (SQLException e) {
+            // Handle SQL exceptions
+            e.printStackTrace();
+        } catch (Exception e) {
+            // Handle other exceptions
+            e.printStackTrace();
+        }
+
+        return nhanVien;
+    }
 }
