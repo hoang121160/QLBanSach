@@ -32,4 +32,7 @@ public class TheLoaiController {
     public void deleteTheLoai(int maTheLoai) {
         service.deleteTheLoai(maTheLoai);
     }
+     public void updateTheLoai(TheLoai update){
+        service.updateTheLoai(update);
+    }
 }

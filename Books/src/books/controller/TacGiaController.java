@@ -26,4 +26,7 @@ public class TacGiaController {
     public void deleteTacGia(int maTacGia){
         service.deleteTacGia(maTacGia);
     }
+    public void updateTacGia(TacGia update){
+        service.updateTacGia(update);
+    }
 }

@@ -95,5 +95,8 @@ public class TheLoai {
     public String toString() {
         return ten;
     }
+     public TheLoai(int maTheLoai) {
+        this.maTheLoai = maTheLoai;
+    }
 
 }
