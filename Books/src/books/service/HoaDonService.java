@@ -21,21 +21,31 @@ public class HoaDonService {
 
     public List<HoaDon> getAll() {
         String sql = """
-                    SELECT [maHD]
-                          ,[maKH]
-                          ,[maNV]
-                          ,[tenNguoiNhan]
-                          ,[diaChiNhan]
-                          ,[soDienThoai]
-                          ,[soLuong]
-                          ,[hinhThucThanhToan]
-                          ,[trangThai]  
-                          ,[createAt]
-                          ,[createBy]
-                          ,[updateAt]
-                          ,[updateBy]
-                       
-                      FROM [dbo].[HoaDon]
+                    SELECT 
+                            HoaDon.maHD, 
+                            HoaDon.maKH, 
+                            HoaDon.maNV, 
+                            HoaDon.tenNguoiNhan, 
+                            HoaDon.diaChiNhan,
+                            HoaDon.soDienThoai,
+                            HoaDon.hinhThucThanhToan,
+                            HoaDon.trangThai,
+                            HoaDon.createAt,
+                            HoaDon.updateAt,
+                            HoaDonChiTiet.maSPCT, 
+                            SanPhamChiTiet.ten AS tenSanPham, 
+                            HoaDonChiTiet.soLuong, 
+                            HoaDonChiTiet.donGia, 
+                            HoaDonChiTiet.thanhTien,
+                            NhanVien.ten AS tenNhanVien
+                        FROM 
+                            HoaDon
+                        INNER JOIN 
+                            HoaDonChiTiet ON HoaDon.maHD = HoaDonChiTiet.maHD
+                        INNER JOIN 
+                            SanPhamChiTiet ON HoaDonChiTiet.maSPCT = SanPhamChiTiet.maSPCT
+                        INNER JOIN 
+                            NhanVien ON HoaDon.maNV = NhanVien.maNV
                     """;
         try ( Connection con = DBconnect.getConnection();  PreparedStatement ps = con.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
@@ -51,9 +61,9 @@ public class HoaDonService {
                 hd.setHinhThucThanhToan(rs.getString("hinhThucThanhToan"));
                 hd.setTrangThai(rs.getString("trangThai"));
                 hd.setCreateAt(rs.getTimestamp("createAt").toLocalDateTime());
-                hd.setUpdateAt(rs.getTimestamp("updateAt").toLocalDateTime());
-                hd.setCreateBy(rs.getString("createBy"));
-                hd.setUpdateBy(rs.getString("updateBy"));
+                hd.setUpdateAt(rs.getTimestamp("updateAt").toLocalDateTime());             
+                hd.setThanhTien(rs.getString("thanhTien"));
+                hd.setNhanVien(rs.getString("tenNhanVien"));
                
 
                 list.add(hd);

@@ -28,7 +28,10 @@ public class SanPhamService {
         try {
             List<SanPham> list = new ArrayList<>();
             Connection conn = DBconnect.getConnection();
+
+
             String sql = "select maSP, ten, soLuong from SanPham";
+
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
