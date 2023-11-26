@@ -177,15 +177,16 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     }
 
     public void loadSanPhamToTable() {
-        List<SanPham> tacGia = sanPhamController.getAllSanPham();
+        List<SanPham> sanPham = sanPhamController.getAllSanPham();
         DefaultTableModel dtm = (DefaultTableModel) tblSanPham.getModel();
         dtm.setRowCount(0); // Xóa dữ liệu cũ trong bảng
         int stt = 1; // Khởi tạo biến stt với giá trị ban đầu là 1
-        for (SanPham tg : tacGia) {
+        for (SanPham sp : sanPham) {
             Object[] rowData = new Object[4];
             rowData[0] = stt++; // Gán giá trị stt vào cột đầu tiên và tăng giá trị stt sau đó
-            rowData[1] = tg.getMaSP();
-            rowData[2] = tg.getTen();
+            rowData[1] = sp.getMaSP();
+            rowData[2] = sp.getTen();
+            rowData[3] = sp.getSoLuong();
             dtm.addRow(rowData);
         }
     }
@@ -228,6 +229,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         SanPham sanPham = new SanPham();
         txtMaSP.setText(tblSanPham.getValueAt(i, 1).toString());
         txtTen1.setText(tblSanPham.getValueAt(i, 2).toString());
+        txtSoLuong.setText(tblSanPham.getValueAt(i, 3).toString());
     }
 
     private void loadTacGiaToTextBoxes(int i) {
@@ -337,6 +339,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jButton6 = new javax.swing.JButton();
         btnChiTietSP = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jLabel20 = new javax.swing.JLabel();
+        txtSoLuong = new javax.swing.JTextField();
         jTabbedPane7 = new javax.swing.JTabbedPane();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -469,24 +473,32 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 .addGap(10, 10, 10))
         );
 
+        jLabel20.setText("Số lượng:");
+
         javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel13Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addGap(40, 40, 40)
-                        .addComponent(txtTen1))
-                    .addGroup(jPanel13Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(42, 42, 42)
-                        .addComponent(txtMaSP, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(72, 72, 72)
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(40, 40, 40)
+                                .addComponent(txtTen1))
+                            .addGroup(jPanel13Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(42, 42, 42)
+                                .addComponent(txtMaSP, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel20)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(46, 46, 46)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(325, Short.MAX_VALUE))
+                .addContainerGap(351, Short.MAX_VALUE))
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -495,10 +507,14 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(txtMaSP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
+                .addGap(30, 30, 30)
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
                     .addComponent(txtTen1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel20)
+                    .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel13Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -510,13 +526,13 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
         tblSanPham.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "STT", "Mã sản phẩm", "Tên"
+                "STT", "Mã sản phẩm", "Tên", "Số lượng"
             }
         ));
         tblSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1129,6 +1145,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
         String tenSanPham = txtTen1.getText();
+        int soLuong = Integer.parseInt(txtSoLuong.getText()) ;
         // Kiểm tra các trường không được trống
         if (tenSanPham.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin sản phẩm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
@@ -1137,9 +1154,11 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         SanPham sanPham = new SanPham();
         // Thiết lập thông tin cho đối tượng TacGia
         sanPham.setTen(tenSanPham);
+        sanPham.setSoLuong(soLuong);
         try {
             // Gọi phương thức addTacGia từ TacGiaController
             sanPhamController.addSanPham(sanPham);
+            loadSanPhamToTable();
             // Thông báo thành công
             JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             // Sau khi thêm tác giả thành công, cập nhật combobox cboTacGia
@@ -1147,7 +1166,8 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             // Xóa dữ liệu trên các trường nhập liệu
             txtMaSP.setText("");
             txtTen1.setText("");
-            loadSanPhamToTable();
+            txtSoLuong.setText("");
+            
         } catch (Exception ex) {
             // Xử lý ngoại lệ khi thêm tác giả thất bại
             JOptionPane.showMessageDialog(this, "Thêm sản phẩm thất bại: " + ex.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
@@ -1171,6 +1191,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         loadSanPhamToTable();
         txtMaSP.setText("");
         txtTen1.setText("");
+        txtSoLuong.setText("");
         JOptionPane.showMessageDialog(this, "Sản phẩm đã dược làm mới!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButton8ActionPerformed
 
@@ -1569,6 +1590,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
             // Lấy thông tin mới từ giao diện người dùng
             String tenMoi = txtTen1.getText();
+            int soLuong = Integer.parseInt(txtSoLuong.getText());
 
             // Kiểm tra xem có thông tin cần sửa không
             if (tenMoi.isEmpty()) {
@@ -1580,17 +1602,19 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             SanPham sanPhamToUpdate = new SanPham();
             sanPhamToUpdate.setMaSP(maSPToUpdate);
             sanPhamToUpdate.setTen(tenMoi);
+            sanPhamToUpdate.setSoLuong(soLuong);
 
             // Thực hiện cập nhật
             sanPhamController.updateSanPham(sanPhamToUpdate);
-
+            loadSanPhamToTable();
             // Hiển thị thông báo thành công
             JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
 
             // Các hành động bổ sung nếu cần, như làm mới hiển thị
-            loadSanPhamToTable();
+            
             txtMaSP.setText("");
             txtTen1.setText("");
+            txtSoLuong.setText("");
         } catch (NumberFormatException e) {
             // Xử lý trường hợp ID không phải là số hợp lệ
             JOptionPane.showMessageDialog(this, "Định dạng ID sản phẩm không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -1686,6 +1710,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1735,6 +1760,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtNamXuatBan;
     private javax.swing.JTextField txtNgonNgu;
     private javax.swing.JTextField txtNhaXuatBan;
+    private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtSoTrang;
     private javax.swing.JTextField txtTen;
     private javax.swing.JTextField txtTen1;
