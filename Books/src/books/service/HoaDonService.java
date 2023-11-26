@@ -76,6 +76,41 @@ public class HoaDonService {
         }
         return null;
     }
+    public HoaDon findNhanVienMaNV(int maHD) {
+    String sql = "SELECT * FROM [dbo].[HoaDon] WHERE maHD = ?";
+    
+    try (Connection con = DBconnect.getConnection();  
+         PreparedStatement ps = con.prepareStatement(sql)) {
+        
+        // Thiết lập giá trị cho tham số
+        ps.setInt(1, maHD);
+
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            HoaDon hd = new HoaDon();
+            hd.setMaHD(rs.getInt("maHD"));
+            hd.setMaKH(rs.getInt("maKH"));
+            hd.setMaNV(rs.getInt("maNV"));
+            hd.setTenNguoiNhan(rs.getString("tenNguoiNhan"));
+            hd.setDiaChiNhan(rs.getString("diaChiNhan"));
+            hd.setSoDienThoai(rs.getString("soDienThoai"));
+            hd.setSoLuong(rs.getInt("soLuong"));
+            hd.setHinhThucThanhToan(rs.getString("hinhThucThanhToan"));
+            hd.setTrangThai(rs.getString("trangThai"));
+
+            // Trả về đối tượng HoaDon đã được thiết lập giá trị
+            return hd;
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    
+    // Nếu không tìm thấy dữ liệu, trả về null
+    return null;
+}
+
     
     
 
