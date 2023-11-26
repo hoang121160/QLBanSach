@@ -28,13 +28,14 @@ public class SanPhamService {
         try {
             List<SanPham> list = new ArrayList<>();
             Connection conn = DBconnect.getConnection();
-            String sql = "select maSP, ten from SanPham";
+            String sql = "select maSP, ten, soLuong from SanPham";
             PreparedStatement ps = conn.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 SanPham sp = new SanPham();
                 sp.setMaSP(rs.getInt("maSP"));
                 sp.setTen(rs.getString("ten"));
+                sp.setSoLuong(rs.getInt("soLuong"));
                 list.add(sp);
             }
             return list;
@@ -46,11 +47,12 @@ public class SanPhamService {
 
     public void addSanPham(SanPham sanPham) {
         Connection conn = DBconnect.getConnection();
-        String sql = "INSERT INTO SanPham (ten) VALUES (?)";
+        String sql = "INSERT INTO SanPham (ten, soLuong) VALUES (?,?)";
         try {
             // Tạo PreparedStatement
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, sanPham.getTen());
+             ps.setInt(2, sanPham.getSoLuong());
             // Thực thi câu lệnh SQL để thêm tác giả vào cơ sở dữ liệu
             ps.executeUpdate();
             // Đóng kết nối và các đối tượng liên quan
@@ -65,10 +67,11 @@ public class SanPhamService {
         Connection conn = null;
         try {
             conn = DBconnect.getConnection();
-            String sql = "UPDATE SanPham SET ten = ? WHERE maSP = ?";
+            String sql = "UPDATE SanPham SET ten = ?, soLuong = ? WHERE maSP = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, sanPhamToUpdate.getTen());
-            ps.setInt(2, sanPhamToUpdate.getMaSP());
+             ps.setInt(2, sanPhamToUpdate.getSoLuong());
+            ps.setInt(3, sanPhamToUpdate.getMaSP());
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
