@@ -11,8 +11,14 @@ import books.model.HoaDonChiTiet;
 import books.model.SanPhamChiTiet;
 import books.service.HoaDonChiTietService;
 import books.service.HoaDonService;
+import books.service.SanPhamChiTietService;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,14 +26,20 @@ import javax.swing.table.DefaultTableModel;
  * @author Admin
  */
 public class HoaDonNew extends javax.swing.JPanel {
-    DefaultTableModel model = new  DefaultTableModel();
+
+    DefaultTableModel model = new DefaultTableModel();
     List<HoaDon> dshoaHoaDons = new ArrayList<>();
     HoaDonService serviceHoaDon = new HoaDonService();
+    int indexHoaDonSelected;
+    DefaultTableModel modelHoaDOnChiTiet = new DefaultTableModel();
+    List<HoaDonChiTiet> listHoaDonChiTiet = new ArrayList<>();
+    HoaDonChiTietService serviceHoaDonChiTiet = new HoaDonChiTietService();
+    SanPhamChiTietService serviceSanPhamChiTiet = new SanPhamChiTietService();
 
     /**
      * Creates new form HoaDonNew
      */
-    private SanPhamChiTietController sanPhamChiTietController ;
+    private SanPhamChiTietController sanPhamChiTietController;
     private HoaDonChiTietService service;
 
     public HoaDonNew() {
@@ -36,30 +48,31 @@ public class HoaDonNew extends javax.swing.JPanel {
         sanPhamChiTietController = new SanPhamChiTietController();
         loadHoaDonChiTietToTable();
         loadSanPhamChiTietToTable();
-        model = (DefaultTableModel) hoaDonTbl.getModel();
-        dshoaHoaDons=serviceHoaDon.getAll();
+        model = (DefaultTableModel) hoaDonTbl.getModel(); // bảng hóa đơn
+        dshoaHoaDons = serviceHoaDon.getAll();
         loadHoaDonLenTalbe(dshoaHoaDons);
+        indexHoaDonSelected = 0;
     }
 
     public void loadHoaDonChiTietToTable() {
         List<HoaDonChiTiet> hoaDonChiTietList = service.getAllHoaDonChiTiet();
-        DefaultTableModel dtm = (DefaultTableModel) tblGioHang.getModel();
+        DefaultTableModel dtm = (DefaultTableModel) tblGioHang.getModel();    //bảng giỏ hàng 
         dtm.setRowCount(0); // Xóa dữ liệu cũ trong bảng
         for (HoaDonChiTiet hoaDonChiTiet : hoaDonChiTietList) {
-            int stt=1;
-            Object[] rowData = new Object[7];
+            int stt = 1;
+            Object[] rowData = new Object[6];
             rowData[0] = stt++;
             rowData[1] = hoaDonChiTiet.getMaSPCT();
             rowData[2] = hoaDonChiTiet.getTenSp();
             rowData[3] = hoaDonChiTiet.getSoLuong();
             rowData[4] = hoaDonChiTiet.getDonGia();
             rowData[5] = hoaDonChiTiet.getThanhTien();
-            rowData[6] = hoaDonChiTiet.getTrangThai();
             dtm.addRow(rowData);
         }
     }
+
     public void loadSanPhamChiTietToTable() {
-        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietController.getAllSanPhamChiTiet();
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietController.getAllSanPhamChiTiet(); // bảng sản phẩm
         DefaultTableModel dtm = (DefaultTableModel) tblSanPham.getModel();
         dtm.setRowCount(0); // Xóa dữ liệu cũ trong bảng
         for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList) {
@@ -77,9 +90,10 @@ public class HoaDonNew extends javax.swing.JPanel {
             dtm.addRow(rowData);
         }
     }
+
     public void loadHoaDonLenTalbe(List<HoaDon> ds) {
         model.setRowCount(0);
-        int stt= 1;
+        int stt = 1;
         for (HoaDon hd : ds) {
             model.addRow(new Object[]{
                 stt++,
@@ -87,12 +101,38 @@ public class HoaDonNew extends javax.swing.JPanel {
                 hd.getNhanVien(),
                 hd.getTenNguoiNhan(),
                 hd.getTrangThai(),
-                hd.getCreateAt(),
-            });
-            
+                hd.getCreateAt(),});
+
         }
-        
+
     }
+    public void fillTableGioHang(JTable tblGioHang, SanPhamChiTiet spct ) {
+    DefaultTableModel dtm = (DefaultTableModel) tblGioHang.getModel();
+    int stt=1;           // table giỏ hàng
+    Object[] rowData = {
+        stt++,
+        spct.getMaSPCT(),
+        spct.getTen(),      
+        spct.getGia(),
+       
+    };
+    dtm.addRow(rowData);
+}
+    public void fillTableHoaDOn(JTable hoaDonTbl, HoaDon hd ) {
+    DefaultTableModel dtm = (DefaultTableModel) hoaDonTbl.getModel();
+    int stt=1;           // table hóa đơn
+    Object[] rowData = {
+        stt++,
+        hd.getMaHD(),
+        hd.getNhanVien(),
+        hd.getTenNguoiNhan(),
+        hd.getTrangThai(),
+        hd.getCreateAt()
+    };
+    dtm.addRow(rowData);
+}
+    
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -193,6 +233,11 @@ public class HoaDonNew extends javax.swing.JPanel {
                 "STT", "Mã hóa đơn", "Tên nhân viên", "Tên khách hàng", "Trạng thái", "Ngày tạo"
             }
         ));
+        hoaDonTbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                hoaDonTblMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(hoaDonTbl);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
@@ -221,6 +266,11 @@ public class HoaDonNew extends javax.swing.JPanel {
                 "Mã sản phẩm", "Mã tác giả", "Mã thể loại", "Tên", "Giá", "Ngôn ngữ", "Số trang", "Nhà xuất bản", "Năm xuất bản", "Lần tái bản"
             }
         ));
+        tblSanPham.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblSanPhamMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblSanPham);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
@@ -271,6 +321,11 @@ public class HoaDonNew extends javax.swing.JPanel {
         jButton6.setText("Thanh toán");
 
         taoHoaDonBt.setText("Tạo hóa đơn");
+        taoHoaDonBt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                taoHoaDonBtActionPerformed(evt);
+            }
+        });
 
         jButton8.setText("Hủy");
 
@@ -583,9 +638,17 @@ public class HoaDonNew extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null}
             },
             new String [] {
-                "STT", "Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền", "Trạng thái"
+                "STT", "Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền", "chọn"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane5.setViewportView(tblGioHang);
 
         jButton1.setText("Xóa");
@@ -659,8 +722,120 @@ public class HoaDonNew extends javax.swing.JPanel {
 
     private void taoHoaDonDatHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taoHoaDonDatHangActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_taoHoaDonDatHangActionPerformed
+
+    private void hoaDonTblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_hoaDonTblMouseClicked
+        // TODO add your handling code here:
+
+
+    }//GEN-LAST:event_hoaDonTblMouseClicked
+
+    private void taoHoaDonBtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taoHoaDonBtActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_taoHoaDonBtActionPerformed
+
+    private void tblSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamMouseClicked
+        // TODO add your handling code here:
+//        int indexs = tblSanPham.getSelectedRow();
+//        int indexGioHang = -1;
+//        if (indexs == -1) {
+//            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm");
+//            return;
+//        }
+//        String input = JOptionPane.showInputDialog(this, "Mời nhập số lượng");
+//        if (input == null || input.isEmpty()) {
+//            return;
+//        }
+//        try {
+//            System.out.println("Hello");
+//            System.out.println("HaiPham");
+//            System.out.println("12D");
+//            int soLuongMua = Integer.parseInt(input);
+//            int soLuongTon = Integer.parseInt(tblSanPham.getValueAt(indexs, 1).toString());
+//            if (soLuongMua > soLuongTon) {
+//                JOptionPane.showMessageDialog(this, "Số lượng không đủ");
+//                return;
+//            } else if (soLuongMua < 1) {
+//                JOptionPane.showMessageDialog(this, "Số lượng không hợp lệ, vui lòng nhập lại");
+//                return;
+//            }
+//            int maSP = Integer.parseInt(tblSanPham.getValueAt(indexs, 0).toString());;
+//            int soLuong = Integer.parseInt(tblSanPham.getValueAt(indexs, 1).toString());
+//            double gia = Double.parseDouble(tblSanPham.getValueAt(indexs, 2).toString());
+//            String ten = tblSanPham.getValueAt(indexs, 3).toString();
+//            double thanhTien = Math.round((soLuong * gia) * 100) / 100;
+//            SanPhamChiTiet spct = (SanPhamChiTiet) serviceSanPhamChiTiet.getSanPhamChiTietByMaSP(maSP);
+//            if (tblGioHang.getRowCount() > 0) {
+//                for (int i = 0; i < tblGioHang.getRowCount(); i++) {
+//                    if (tblGioHang.getValueAt(i, 0) != null) {
+//                        if (tblGioHang.getValueAt(i, 0).toString().equals(maSP)) {
+//                            indexGioHang = i;
+//                            break;
+//                        }
+//                    }
+//                }
+//            }
+//            if (indexGioHang != -1) {
+//                int soLuongHienTai = Integer.parseInt(tblGioHang.getValueAt(indexGioHang, 1).toString());
+//                int soLuonngSauKhiThem = soLuongHienTai + Integer.parseInt(input);
+//                tblGioHang.setValueAt(soLuonngSauKhiThem, indexGioHang, 1);
+//                double thanhTienSauKhiThem = Math.round((soLuonngSauKhiThem * gia) * 100) / 100;
+//                tblGioHang.setValueAt(thanhTienSauKhiThem, indexGioHang, 3);
+//            } else {
+//                fillTableGioHang(tblGioHang, spct, Integer.parseInt(input));
+//            }
+//            soLuongTon = soLuongTon - soLuongMua;
+//            tblSanPham.setValueAt(soLuongTon, indexs, 1);
+//            fillDonHang2();
+//            //Quân
+//            //Nhớ đổi đường dẫn thư mục
+//            int indexHoaDonCho = hoaDonTbl.getSelectedRow();
+//            String maHD = hoaDonTbl.getValueAt(indexHoaDonCho, 1).toString();
+//            String parentDirectory = "bansachvn1";
+//            String newDirectoryName = "GioHang";
+//            luuGioHangVaoFile(maHD, parentDirectory, newDirectoryName);
+//        } catch (Exception e) {
+//            return;
+//        }
+            tblSanPham.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+    public void valueChanged(ListSelectionEvent e) {
+        if (!e.getValueIsAdjusting()) {
+            // Đảm bảo rằng sự kiện không phải do điều chỉnh giá trị (ví dụ: người dùng giữ chuột và chọn nhiều dòng)
+            int selectedRow = tblSanPham.getSelectedRow();
+            if (selectedRow != -1) {
+                // Lấy thông tin từ dòng đã chọn và thêm vào giỏ hàng
+                addSelectedProductToCart(selectedRow);
+            }
+        }
+    }
+});
+           
+
+    }//GEN-LAST:event_tblSanPhamMouseClicked
+    private void addSelectedProductToCart(int selectedRow) {
+    DefaultTableModel dtmGioHang = (DefaultTableModel) tblGioHang.getModel();
+    int stt=1;
+    // Lấy thông tin từ dòng đã chọn trong bảng sản phẩm
+    int maSPCT = (int) tblSanPham.getValueAt(selectedRow, 0);
+    String tenSP = (String) tblSanPham.getValueAt(selectedRow, 1);
+    int soLuong = (int) tblSanPham.getValueAt(selectedRow, 2);
+    int donGia = (int) tblSanPham.getValueAt(selectedRow, 3);
+    int thanhTien = (int) tblSanPham.getValueAt(selectedRow, 4);
+    // ... (lấy thông tin khác tương tự)
+
+    // Thêm thông tin vào bảng giỏ hàng
+    Object[] rowData = {
+        stt++,
+        maSPCT,
+        tenSP,
+        soLuong,
+        donGia,
+        thanhTien              
+    };
+    dtmGioHang.addRow(rowData);
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

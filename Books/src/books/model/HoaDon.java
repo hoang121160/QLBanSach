@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @author tranvandang
  */
 public class HoaDon {
-    private int maHD;
+    public int maHD;
     private int maKH; // Integer để có thể là null
     private int maNV;
     private String tenNguoiNhan;

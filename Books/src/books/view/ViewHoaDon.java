@@ -164,7 +164,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
         jTabbedPane6 = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        TxtSearch = new javax.swing.JTextField();
+        txtSearch = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jComboBox4 = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
@@ -173,7 +173,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
         txtSoHoaDon1 = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
         tblHoaDon2 = new javax.swing.JTable();
-        BtTimKiem = new javax.swing.JButton();
+        btnSearchDatHang = new javax.swing.JButton();
         jTabbedPane7 = new javax.swing.JTabbedPane();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -191,7 +191,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
         txtSoHoaDon = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         tblHoaDon1 = new javax.swing.JTable();
-        timBt = new javax.swing.JButton();
+        btnSearchTaiQuay = new javax.swing.JButton();
         jTabbedPane5 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -275,12 +275,12 @@ public class ViewHoaDon extends javax.swing.JPanel {
         ));
         jScrollPane6.setViewportView(tblHoaDon2);
 
-        BtTimKiem.setBackground(new java.awt.Color(0, 255, 204));
-        BtTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/books/icons/Search.png"))); // NOI18N
-        BtTimKiem.setText("tìm");
-        BtTimKiem.addActionListener(new java.awt.event.ActionListener() {
+        btnSearchDatHang.setBackground(new java.awt.Color(0, 255, 204));
+        btnSearchDatHang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/books/icons/Search.png"))); // NOI18N
+        btnSearchDatHang.setText("tìm");
+        btnSearchDatHang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtTimKiemActionPerformed(evt);
+                btnSearchDatHangActionPerformed(evt);
             }
         });
 
@@ -306,11 +306,11 @@ public class ViewHoaDon extends javax.swing.JPanel {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addGap(18, 18, 18)
-                                .addComponent(TxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
-                                .addComponent(BtTimKiem))
+                                .addComponent(btnSearchDatHang))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                                 .addGap(41, 41, 41)
                                 .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
@@ -327,8 +327,8 @@ public class ViewHoaDon extends javax.swing.JPanel {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(TxtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(BtTimKiem))
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearchDatHang))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
@@ -429,12 +429,12 @@ public class ViewHoaDon extends javax.swing.JPanel {
         ));
         jScrollPane5.setViewportView(tblHoaDon1);
 
-        timBt.setForeground(new java.awt.Color(0, 255, 204));
-        timBt.setIcon(new javax.swing.ImageIcon(getClass().getResource("/books/icons/Search.png"))); // NOI18N
-        timBt.setText("tìm");
-        timBt.addActionListener(new java.awt.event.ActionListener() {
+        btnSearchTaiQuay.setForeground(new java.awt.Color(0, 255, 204));
+        btnSearchTaiQuay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/books/icons/Search.png"))); // NOI18N
+        btnSearchTaiQuay.setText("tìm");
+        btnSearchTaiQuay.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                timBtActionPerformed(evt);
+                btnSearchTaiQuayActionPerformed(evt);
             }
         });
 
@@ -450,7 +450,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(TxtTimHoaDonTaiQuay, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(32, 32, 32)
-                        .addComponent(timBt))
+                        .addComponent(btnSearchTaiQuay))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addGap(18, 18, 18)
@@ -477,7 +477,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
                     .addComponent(TxtTimHoaDonTaiQuay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(timBt))
+                    .addComponent(btnSearchTaiQuay))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel11)
@@ -567,7 +567,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BtTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtTimKiemActionPerformed
+    private void btnSearchDatHangActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchDatHangActionPerformed
         // TODO add your handling code here:
 //        try {
 //            int MaNV = Integer.parseInt(TxtSearch.getText());
@@ -578,51 +578,63 @@ public class ViewHoaDon extends javax.swing.JPanel {
 //            
 //        } catch (Exception e) {
 //        }
+//        try {
+//            int MaHD = Integer.parseInt(TxtSearch.getText());
+//            HoaDon search = service.findHoaDonMaNV(MaHD);
+//
+//            if (search == null) {
+//                JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn với mã " + MaHD);
+//            } else {
+//                // Lấy mô hình của bảng
+//                DefaultTableModel model = (DefaultTableModel) tblHoaDon2.getModel();
+//
+//                // Duyệt qua từng dòng để tìm dòng có mã hóa đơn tương ứng
+//                for (int row = 0; row < model.getRowCount(); row++) {
+//                    int maHDInTable = (int) model.getValueAt(row,1 /* yourMaHDColumnIndex */); // Thay chỉ số cột của mã hóa đơn trong bảng
+//
+//                    // So sánh mã hóa đơn trong bảng với mã hóa đơn bạn vừa tìm thấy
+//                    if (maHDInTable == search.getMaHD()) {
+//                        // Đổi màu của dòng
+//                        tblHoaDon2.setSelectionBackground(Color.BLUE);
+//                        tblHoaDon2.setSelectionForeground(Color.RED);
+//                        tblHoaDon2.setRowSelectionAllowed(true);
+//                        ((DefaultTableModel) tblHoaDon2.getModel()).fireTableRowsUpdated(row, row);
+//
+//                        // Nếu có nhiều hành động cần thực hiện khi tìm thấy, bạn có thể thêm code ở đây
+//                        break; // Dừng vòng lặp sau khi tìm thấy và xử lý dòng
+//                    }
+//                }
+//            }
+//        } catch (NumberFormatException e) {
+//            JOptionPane.showMessageDialog(this, "Vui lòng nhập một số nguyên hợp lệ.");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         try {
-            int MaHD = Integer.parseInt(TxtSearch.getText());
-            HoaDon search = service.findNhanVienMaNV(MaHD);
-
-            if (search == null) {
-                JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn với mã " + MaHD);
-            } else {
-                // Lấy mô hình của bảng
-                DefaultTableModel model = (DefaultTableModel) tblHoaDon2.getModel();
-
-                // Duyệt qua từng dòng để tìm dòng có mã hóa đơn tương ứng
-                for (int row = 0; row < model.getRowCount(); row++) {
-                    int maHDInTable = (int) model.getValueAt(row,1 /* yourMaHDColumnIndex */); // Thay chỉ số cột của mã hóa đơn trong bảng
-
-                    // So sánh mã hóa đơn trong bảng với mã hóa đơn bạn vừa tìm thấy
-                    if (maHDInTable == search.getMaHD()) {
-                        // Đổi màu của dòng
-                        tblHoaDon2.setSelectionBackground(Color.BLUE);
-                        tblHoaDon2.setSelectionForeground(Color.RED);
-                        tblHoaDon2.setRowSelectionAllowed(true);
-                        ((DefaultTableModel) tblHoaDon2.getModel()).fireTableRowsUpdated(row, row);
-
-                        // Nếu có nhiều hành động cần thực hiện khi tìm thấy, bạn có thể thêm code ở đây
-                        break; // Dừng vòng lặp sau khi tìm thấy và xử lý dòng
-                    }
-                }
+            int maHD = Integer.parseInt(txtSearch.getText());
+            HoaDon searchResults = service.getOne(maHD);
+            updateHoaDonTable(searchResults);
+            if (searchResults == null) {
+                JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn với mã " + searchResults, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập một số nguyên hợp lệ.");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã hóa đơn là một số nguyên", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình tìm kiếm", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
 
-
-    }//GEN-LAST:event_BtTimKiemActionPerformed
+    }//GEN-LAST:event_btnSearchDatHangActionPerformed
 
     private void jComboBox5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox5ActionPerformed
 
-    private void timBtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timBtActionPerformed
+    private void btnSearchTaiQuayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchTaiQuayActionPerformed
         // TODO add your handling code here:
         try {
-            int MaHD = Integer.parseInt(timBt.getText());
-            HoaDon searchTaiQuay = service.findNhanVienMaNV(MaHD);
+            int MaHD = Integer.parseInt(btnSearchTaiQuay.getText());
+            HoaDon searchTaiQuay = service.getOne(MaHD);
 
             if (searchTaiQuay == null) {
                 JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn với mã " + MaHD);
@@ -632,7 +644,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
 
                 // Duyệt qua từng dòng để tìm dòng có mã hóa đơn tương ứng
                 for (int row = 0; row < model.getRowCount(); row++) {
-                    int maHDInTable = (int) model.getValueAt(row,1 /* yourMaHDColumnIndex */); // Thay chỉ số cột của mã hóa đơn trong bảng
+                    int maHDInTable = (int) model.getValueAt(row, 1 /* yourMaHDColumnIndex */); // Thay chỉ số cột của mã hóa đơn trong bảng
 
                     // So sánh mã hóa đơn trong bảng với mã hóa đơn bạn vừa tìm thấy
                     if (maHDInTable == searchTaiQuay.getMaHD()) {
@@ -653,7 +665,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
             e.printStackTrace();
         }
 
-    }//GEN-LAST:event_timBtActionPerformed
+    }//GEN-LAST:event_btnSearchTaiQuayActionPerformed
     public void updateHoaDonTable(HoaDon search) {
         DefaultTableModel modelSearch = (DefaultTableModel) tblHoaDon2.getModel();
         modelSearch.setRowCount(0);
@@ -673,6 +685,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
 
         }
     }
+
     public void updateHoaDonTable1(HoaDon searchTaiQuay) {
         DefaultTableModel modelSearch1 = (DefaultTableModel) tblHoaDon1.getModel();
         modelSearch1.setRowCount(0);
@@ -694,9 +707,9 @@ public class ViewHoaDon extends javax.swing.JPanel {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BtTimKiem;
-    private javax.swing.JTextField TxtSearch;
     private javax.swing.JTextField TxtTimHoaDonTaiQuay;
+    private javax.swing.JButton btnSearchDatHang;
+    private javax.swing.JButton btnSearchTaiQuay;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JComboBox<String> jComboBox2;
@@ -753,7 +766,7 @@ public class ViewHoaDon extends javax.swing.JPanel {
     private javax.swing.JTable tblHoaDon1;
     private javax.swing.JTable tblHoaDon2;
     private javax.swing.JTable tblHoaDonChiTiet;
-    private javax.swing.JButton timBt;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JLabel txtSoHoaDon;
     private javax.swing.JLabel txtSoHoaDon1;
     // End of variables declaration//GEN-END:variables

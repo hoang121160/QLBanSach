@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <NonVisualComponents>
     <Container class="javax.swing.JMenuBar" name="jMenuBar1">
 
@@ -253,13 +253,13 @@
                                           <Group type="102" alignment="0" attributes="0">
                                               <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="TxtSearch" min="-2" pref="308" max="-2" attributes="0"/>
+                                              <Component id="txtSearch" min="-2" pref="308" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
                                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                                              <Component id="BtTimKiem" min="-2" max="-2" attributes="0"/>
+                                              <Component id="btnSearchDatHang" min="-2" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="1" attributes="0">
                                               <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
@@ -285,8 +285,8 @@
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel13" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="TxtSearch" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="BtTimKiem" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="txtSearch" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnSearchDatHang" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -318,7 +318,7 @@
                         <Property name="text" type="java.lang.String" value="T&#xec;m ki&#x1ebf;m h&#xf3;a &#x111;&#x1a1;n:"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JTextField" name="TxtSearch">
+                    <Component class="javax.swing.JTextField" name="txtSearch">
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel14">
                       <Properties>
@@ -456,7 +456,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JButton" name="BtTimKiem">
+                    <Component class="javax.swing.JButton" name="btnSearchDatHang">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="cc" green="ff" red="0" type="rgb"/>
@@ -467,7 +467,7 @@
                         <Property name="text" type="java.lang.String" value="t&#xec;m"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtTimKiemActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchDatHangActionPerformed"/>
                       </Events>
                     </Component>
                   </SubComponents>
@@ -597,7 +597,7 @@
                                       <EmptySpace type="separate" max="-2" attributes="0"/>
                                       <Component id="TxtTimHoaDonTaiQuay" min="-2" pref="308" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                                      <Component id="timBt" min="-2" max="-2" attributes="0"/>
+                                      <Component id="btnSearchTaiQuay" min="-2" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="jLabel11" min="-2" max="-2" attributes="0"/>
@@ -632,7 +632,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="TxtTimHoaDonTaiQuay" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="timBt" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="btnSearchTaiQuay" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
@@ -735,7 +735,7 @@
                         </Component>
                       </SubComponents>
                     </Container>
-                    <Component class="javax.swing.JButton" name="timBt">
+                    <Component class="javax.swing.JButton" name="btnSearchTaiQuay">
                       <Properties>
                         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="cc" green="ff" red="0" type="rgb"/>
@@ -746,7 +746,7 @@
                         <Property name="text" type="java.lang.String" value="t&#xec;m"/>
                       </Properties>
                       <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="timBtActionPerformed"/>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSearchTaiQuayActionPerformed"/>
                       </Events>
                     </Component>
                   </SubComponents>
