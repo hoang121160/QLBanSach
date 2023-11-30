@@ -18,8 +18,8 @@ public class HoaDonController {
     public HoaDonController() {
         service = new HoaDonService();
     }
-    public List<HoaDon> getAll() {
-        return service.getAll();
-    }
+//    public List<HoaDon> getAll() {
+//        return service.getAll();
+//    }
     
 }

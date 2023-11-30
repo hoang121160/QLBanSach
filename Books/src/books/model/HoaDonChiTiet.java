@@ -6,20 +6,22 @@ package books.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  *
  * @author Admin
  */
 public class HoaDonChiTiet {
+
     private int maHDCT;
-    private int maHD;
-    private int maSPCT;
-    private String tenSp;
-    private String trangThai;
+    private HoaDon hoaDon;
+    private SanPhamChiTiet sanPhamChiTiet;
+    private String tenSP;
     private int soLuong;
     private BigDecimal donGia;
     private BigDecimal thanhTien;
+    private String trangThai;
     private LocalDateTime createAt;
     private String createBy;
     private LocalDateTime updateAt;
@@ -31,15 +33,15 @@ public class HoaDonChiTiet {
     public HoaDonChiTiet() {
     }
 
-    public HoaDonChiTiet(int maHDCT, int maHD, int maSPCT, String tenSp, String trangThai, int soLuong, BigDecimal donGia, BigDecimal thanhTien, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted, String theLoai, String tacGia) {
+    public HoaDonChiTiet(int maHDCT, HoaDon hoaDon, SanPhamChiTiet sanPhamChiTiet, String tenSP, int soLuong, BigDecimal donGia, BigDecimal thanhTien, String trangThai, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted, String theLoai, String tacGia) {
         this.maHDCT = maHDCT;
-        this.maHD = maHD;
-        this.maSPCT = maSPCT;
-        this.tenSp = tenSp;
-        this.trangThai = trangThai;
+        this.hoaDon = hoaDon;
+        this.sanPhamChiTiet = sanPhamChiTiet;
+        this.tenSP = tenSP;
         this.soLuong = soLuong;
         this.donGia = donGia;
         this.thanhTien = thanhTien;
+        this.trangThai = trangThai;
         this.createAt = createAt;
         this.createBy = createBy;
         this.updateAt = updateAt;
@@ -49,24 +51,6 @@ public class HoaDonChiTiet {
         this.tacGia = tacGia;
     }
 
-    public String getTheLoai() {
-        return theLoai;
-    }
-
-    public void setTheLoai(String theLoai) {
-        this.theLoai = theLoai;
-    }
-
-    public String getTacGia() {
-        return tacGia;
-    }
-
-    public void setTacGia(String tacGia) {
-        this.tacGia = tacGia;
-    }
-
-   
-
     public int getMaHDCT() {
         return maHDCT;
     }
@@ -75,36 +59,28 @@ public class HoaDonChiTiet {
         this.maHDCT = maHDCT;
     }
 
-    public int getMaHD() {
-        return maHD;
+    public HoaDon getHoaDon() {
+        return hoaDon;
     }
 
-    public void setMaHD(int maHD) {
-        this.maHD = maHD;
+    public void setHoaDon(HoaDon hoaDon) {
+        this.hoaDon = hoaDon;
     }
 
-    public int getMaSPCT() {
-        return maSPCT;
+    public SanPhamChiTiet getSanPhamChiTiet() {
+        return sanPhamChiTiet;
     }
 
-    public void setMaSPCT(int maSPCT) {
-        this.maSPCT = maSPCT;
+    public void setSanPhamChiTiet(SanPhamChiTiet sanPhamChiTiet) {
+        this.sanPhamChiTiet = sanPhamChiTiet;
     }
 
-    public String getTenSp() {
-        return tenSp;
+    public String getTenSP() {
+        return tenSP;
     }
 
-    public void setTenSp(String tenSp) {
-        this.tenSp = tenSp;
-    }
-
-    public String getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
+    public void setTenSP(String tenSP) {
+        this.tenSP = tenSP;
     }
 
     public int getSoLuong() {
@@ -124,11 +100,20 @@ public class HoaDonChiTiet {
     }
 
     public BigDecimal getThanhTien() {
-        return thanhTien;
+        BigDecimal soLuongDecimal = new BigDecimal(soLuong);
+        return donGia.multiply(soLuongDecimal);
     }
 
     public void setThanhTien(BigDecimal thanhTien) {
         this.thanhTien = thanhTien;
+    }
+
+    public String getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(String trangThai) {
+        this.trangThai = trangThai;
     }
 
     public LocalDateTime getCreateAt() {
@@ -170,5 +155,41 @@ public class HoaDonChiTiet {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
-    
+
+    public String getTheLoai() {
+        return theLoai;
+    }
+
+    public void setTheLoai(String theLoai) {
+        this.theLoai = theLoai;
+    }
+
+    public String getTacGia() {
+        return tacGia;
+    }
+
+    public void setTacGia(String tacGia) {
+        this.tacGia = tacGia;
+    }
+
+    public void setSanPhamChiTiet(int maSPCT) {
+        if (this.sanPhamChiTiet == null) {
+            this.sanPhamChiTiet = new SanPhamChiTiet();
+        }
+        this.sanPhamChiTiet.setMaSPCT(maSPCT);
+    }
+    public void setHoaDon(int maHD) {
+        if (this.hoaDon == null) {
+            this.hoaDon = new HoaDon();
+        }
+        this.hoaDon.setMaHD(maHD);
+    }
+
+    public void setTenSPCT(String tenSPCT) {
+        if (this.sanPhamChiTiet == null) {
+            this.sanPhamChiTiet = new SanPhamChiTiet();
+        }
+        this.sanPhamChiTiet.setTen(tenSPCT);
+    }
+
 }

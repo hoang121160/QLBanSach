@@ -147,4 +147,42 @@ public class NhanVienService {
 
         return nhanVien;
     }
+
+    public List<String> getAllTenNV() {
+        List<String> tenNVList = new ArrayList<>();
+
+        String sql = "SELECT ten FROM NhanVien";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String tenNV = rs.getString("ten");
+                tenNVList.add(tenNV);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tenNVList;
+    }
+
+    public int getMaNVByTen(String tenNV) {
+        int maNV = -1; // Giả sử -1 là giá trị mặc định nếu không tìm thấy
+
+        String sql = "SELECT maNV FROM NhanVien WHERE ten = ?";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, tenNV);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                maNV = rs.getInt("maNV");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return maNV;
+    }
 }

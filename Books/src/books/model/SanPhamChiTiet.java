@@ -13,6 +13,7 @@ public class SanPhamChiTiet {
     private SanPham sanPham;
     private TheLoai theLoai;
     private String ten;
+    private int soLuong;
     private BigDecimal gia;
     private String ngonNgu;
     private int soTrang;
@@ -23,12 +24,13 @@ public class SanPhamChiTiet {
     public SanPhamChiTiet() {
     }
 
-    public SanPhamChiTiet(int maSPCT, TacGia tacGia, SanPham sanPham, TheLoai theLoai, String ten, BigDecimal gia, String ngonNgu, int soTrang, String nhaXuatBan, int namXuatBan, int lanTaiBan) {
+    public SanPhamChiTiet(int maSPCT, TacGia tacGia, SanPham sanPham, TheLoai theLoai, String ten, int soLuong, BigDecimal gia, String ngonNgu, int soTrang, String nhaXuatBan, int namXuatBan, int lanTaiBan) {
         this.maSPCT = maSPCT;
         this.tacGia = tacGia;
         this.sanPham = sanPham;
         this.theLoai = theLoai;
         this.ten = ten;
+        this.soLuong = soLuong;
         this.gia = gia;
         this.ngonNgu = ngonNgu;
         this.soTrang = soTrang;
@@ -75,6 +77,14 @@ public class SanPhamChiTiet {
 
     public void setTen(String ten) {
         this.ten = ten;
+    }
+
+    public int getSoLuong() {
+        return soLuong;
+    }
+
+    public void setSoLuong(int soLuong) {
+        this.soLuong = soLuong;
     }
 
     public BigDecimal getGia() {
@@ -124,6 +134,8 @@ public class SanPhamChiTiet {
     public void setLanTaiBan(int lanTaiBan) {
         this.lanTaiBan = lanTaiBan;
     }
+
+    
 
     public void setTacGia(String tenTacGia) {
         if (this.tacGia == null) {

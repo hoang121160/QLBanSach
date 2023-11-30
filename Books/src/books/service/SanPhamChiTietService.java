@@ -89,7 +89,7 @@ public class SanPhamChiTietService {
                     + "    spct.maSPCT,\n"
                     + "    tg.ten AS tenTacGia,\n"
                     + "    tl.ten AS tenTheLoai,\n"
-                    + "    spct.ten,\n"
+                    + "    spct.ten, spct.soLuong,\n"
                     + "    spct.gia,\n"
                     + "    spct.ngonNgu,\n"
                     + "    spct.soTrang,\n"
@@ -110,6 +110,7 @@ public class SanPhamChiTietService {
                 spct.setTacGia(rs.getString("tenTacGia"));
                 spct.setTheLoai(rs.getString("tenTheLoai"));
                 spct.setTen(rs.getString("ten"));
+                spct.setSoLuong(rs.getInt("soLuong"));
                 spct.setGia(rs.getBigDecimal("gia"));
                 spct.setNgonNgu(rs.getString("ngonNgu"));
                 spct.setSoTrang(rs.getInt("soTrang"));
@@ -173,21 +174,22 @@ public class SanPhamChiTietService {
     public void addSanPhamChiTiet(SanPhamChiTiet sp) {
         try {
             Connection conn = DBconnect.getConnection();
-            String query = "INSERT INTO SanPhamChiTiet (maSP, MaTacGia, MaTheLoai, ten, gia, ngonNgu, soTrang, nhaXuatBan, namXuatBan, lanTaiBan)\n"
+            String query = "INSERT INTO SanPhamChiTiet (maSP, MaTacGia, MaTheLoai, ten,soLuong, gia, ngonNgu, soTrang, nhaXuatBan, namXuatBan, lanTaiBan)\n"
                     + "VALUES(?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
 
             // Set values for the parameters
-            ps.setInt(1, sp.getSanPham().getMaSP()); // Assuming you have a getMaSP() method in SanPham class
-            ps.setInt(2, sp.getTacGia().getMaTacGia()); // Assuming you have a getMaTacGia() method in TacGia class
-            ps.setInt(3, sp.getTheLoai().getMaTheLoai()); // Assuming you have a getMaTheLoai() method in TheLoai class
+            ps.setInt(1, sp.getSanPham().getMaSP());
+            ps.setInt(2, sp.getTacGia().getMaTacGia());
+            ps.setInt(3, sp.getTheLoai().getMaTheLoai());
             ps.setString(4, sp.getTen());
-            ps.setBigDecimal(5, sp.getGia());
-            ps.setString(6, sp.getNgonNgu());
-            ps.setInt(7, sp.getSoTrang());
-            ps.setString(8, sp.getNhaXuatBan());
-            ps.setInt(9, sp.getNamXuatBan());
-            ps.setInt(10, sp.getLanTaiBan());
+            ps.setInt(5, sp.getSoLuong());
+            ps.setBigDecimal(6, sp.getGia());
+            ps.setString(7, sp.getNgonNgu());
+            ps.setInt(8, sp.getSoTrang());
+            ps.setString(9, sp.getNhaXuatBan());
+            ps.setInt(10, sp.getNamXuatBan());
+            ps.setInt(11, sp.getLanTaiBan());
 
             // Execute the update
             ps.executeUpdate();
@@ -221,18 +223,19 @@ public class SanPhamChiTietService {
         Connection conn = null;
         try {
             conn = DBconnect.getConnection();
-            String sql = "UPDATE SanPhamChiTiet SET ten = ?, gia = ?, ngonNgu = ?, soTrang = ?, nhaXuatBan = ?, namXuatBan = ?, lanTaiBan = ? WHERE maSPCT = ?";
+            String sql = "UPDATE SanPhamChiTiet SET ten = ?,soLuong = ?, gia = ?, ngonNgu = ?, soTrang = ?, nhaXuatBan = ?, namXuatBan = ?, lanTaiBan = ? WHERE maSPCT = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
 
             // Set values for the parameters
             ps.setString(1, sanPhamChiTietToUpdate.getTen());
-            ps.setBigDecimal(2, sanPhamChiTietToUpdate.getGia());
-            ps.setString(3, sanPhamChiTietToUpdate.getNgonNgu());
-            ps.setInt(4, sanPhamChiTietToUpdate.getSoTrang());
-            ps.setString(5, sanPhamChiTietToUpdate.getNhaXuatBan());
-            ps.setInt(6, sanPhamChiTietToUpdate.getNamXuatBan());
-            ps.setInt(7, sanPhamChiTietToUpdate.getLanTaiBan());
-            ps.setInt(8, sanPhamChiTietToUpdate.getMaSPCT());
+            ps.setInt(2, sanPhamChiTietToUpdate.getSoLuong());
+            ps.setBigDecimal(3, sanPhamChiTietToUpdate.getGia());
+            ps.setString(4, sanPhamChiTietToUpdate.getNgonNgu());
+            ps.setInt(5, sanPhamChiTietToUpdate.getSoTrang());
+            ps.setString(6, sanPhamChiTietToUpdate.getNhaXuatBan());
+            ps.setInt(7, sanPhamChiTietToUpdate.getNamXuatBan());
+            ps.setInt(8, sanPhamChiTietToUpdate.getLanTaiBan());
+            ps.setInt(9, sanPhamChiTietToUpdate.getMaSPCT());
 
             // Execute the update
             ps.executeUpdate();
@@ -297,6 +300,67 @@ public class SanPhamChiTietService {
         }
 
         return sanPhamChiTietList;
+    }
+
+    public SanPhamChiTiet getSanPhamChiTietById(int maSPCT) {
+        String sql = "SELECT * FROM SanPhamChiTiet WHERE maSPCT = ?";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, maSPCT);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                SanPhamChiTiet sanPhamChiTiet = new SanPhamChiTiet();
+                sanPhamChiTiet.setMaSPCT(rs.getInt("maSPCT"));
+                sanPhamChiTiet.setTen(rs.getString("ten"));
+                sanPhamChiTiet.setGia(rs.getBigDecimal("gia"));
+                // Set các thông tin khác của sản phẩm chi tiết từ ResultSet
+                return sanPhamChiTiet;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void giamSoLuongSanPhamChiTiet(int maSPCT, int soLuongNhap) {
+        try {
+            Connection conn = DBconnect.getConnection();
+
+            // Lấy số lượng hiện tại của SanPhamChiTiet từ cơ sở dữ liệu
+            String query = "SELECT soLuong FROM SanPhamChiTiet WHERE maSPCT = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, maSPCT);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int soLuongHienTai = rs.getInt("soLuong");
+                // Kiểm tra xem có đủ số lượng để giảm không
+                if (soLuongHienTai >= soLuongNhap) {
+                    // Giảm số lượng hiện tại bằng số lượng nhập vào
+                    int soLuongMoi = soLuongHienTai - soLuongNhap;
+
+                    // Cập nhật số lượng mới vào cơ sở dữ liệu
+                    String updateQuery = "UPDATE SanPhamChiTiet SET soLuong = ? WHERE maSPCT = ?";
+                    PreparedStatement updatePs = conn.prepareStatement(updateQuery);
+                    updatePs.setInt(1, soLuongMoi);
+                    updatePs.setInt(2, maSPCT);
+                    updatePs.executeUpdate();
+                } else {
+                    // Xử lý khi số lượng không đủ để giảm
+                    System.out.println("Số lượng không đủ để giảm.");
+                }
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            // Xử lý các ngoại lệ khác nếu cần
+            e.printStackTrace();
+        }
     }
 
 }

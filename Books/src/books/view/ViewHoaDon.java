@@ -44,86 +44,86 @@ public class ViewHoaDon extends javax.swing.JPanel {
         dtm = (DefaultTableModel) tblHoaDonChiTiet.getModel();
         model1 = (DefaultTableModel) tblHoaDon.getModel();
         modelTaiquay = (DefaultTableModel) tblHoaDon1.getModel();
-        listHoaDons = service.getAll();
-        showData(listHoaDons);
-        listHoaDonChiTiets= serviceChiTiet.getAllHoaDonChiTiet();
-        showDataChiTiet(listHoaDonChiTiets);
-        showDataChiTiet1(listHoaDonChiTiets);
-        showData1(listHoaDons);
-        //loadSanPhamToTable1();
+//        listHoaDons = service.getAll();
+//        showData(listHoaDons);
+//        listHoaDonChiTiets= serviceChiTiet.getAllHoaDonChiTiet();
+//        showDataChiTiet(listHoaDonChiTiets);
+//        showDataChiTiet1(listHoaDonChiTiets);
+//        showData1(listHoaDons);
+//        //loadSanPhamToTable1();
     }
-    public void showData(List<HoaDon> ds) {
-        model.setRowCount(0);
-
-        for (HoaDon hd : ds) {
-            model.addRow(new Object[]{
-                hd.getMaHD(),
-                hd.getMaKH(),
-                hd.getCreateAt(),
-                hd.getUpdateAt(),
-                hd.getThanhTien(),
-                hd.getMaNV(),
-                hd.getTenNguoiNhan(),
-                hd.getDiaChiNhan(),
-                hd.getSoDienThoai(),
-                hd.getHinhThucThanhToan(),
-                hd.getTrangThai(),});
-
-        }
-    }
-
-    public void showDataChiTiet(List<HoaDonChiTiet> ds) {
-        dtm.setRowCount(0);
-
-        for (HoaDonChiTiet hdct : ds) {
-            dtm.addRow(new Object[]{
-                hdct.getMaSPCT(),
-                hdct.getTenSp(),
-                hdct.getTheLoai(),
-                hdct.getTacGia(),               
-                hdct.getSoLuong(),
-                hdct.getDonGia(),
-                hdct.getThanhTien(),
-               
-            });
-                
-
-        }
-    }
-    public void showData1(List<HoaDon> ds) {
-        modelTaiquay.setRowCount(0);
-            int stt=1;
-        for (HoaDon hd : ds) {
-            modelTaiquay.addRow(new Object[]{
-                stt++,               
-                hd.getMaHD(),
-                hd.getCreateAt(),
-                hd.getUpdateAt(),
-                hd.getThanhTien(),
-                hd.getMaNV(),
-                hd.getTenNguoiNhan(),              
-                hd.getTrangThai(),});
-
-        }
-    }
-    public void showDataChiTiet1(List<HoaDonChiTiet> ds) {
-        model1.setRowCount(0);
-
-        for (HoaDonChiTiet hdct : ds) {
-            model1.addRow(new Object[]{
-                hdct.getMaSPCT(),
-                hdct.getTenSp(),
-                hdct.getTheLoai(),
-                hdct.getTacGia(),
-                hdct.getSoLuong(),
-                hdct.getDonGia(),
-                hdct.getThanhTien(),
-               
-            });
-                
-
-        }
-    }
+//    public void showData(List<HoaDon> ds) {
+//        model.setRowCount(0);
+//
+//        for (HoaDon hd : ds) {
+//            model.addRow(new Object[]{
+//                hd.getMaHD(),
+////                hd.getMaKH(),
+//                hd.getCreateAt(),
+//                hd.getUpdateAt(),
+////                hd.getThanhTien(),
+////                hd.getMaNV(),
+//                hd.getTenNguoiNhan(),
+//                hd.getDiaChiNhan(),
+//                hd.getSoDienThoai(),
+//                hd.getHinhThucThanhToan(),
+//                hd.getTrangThai(),});
+//
+//        }
+//    }
+//
+//    public void showDataChiTiet(List<HoaDonChiTiet> ds) {
+//        dtm.setRowCount(0);
+//
+//        for (HoaDonChiTiet hdct : ds) {
+//            dtm.addRow(new Object[]{
+//                hdct.getMaSPCT(),
+//                hdct.getTenSp(),
+//                hdct.getTheLoai(),
+//                hdct.getTacGia(),               
+//                hdct.getSoLuong(),
+//                hdct.getDonGia(),
+//                hdct.getThanhTien(),
+//               
+//            });
+//                
+//
+//        }
+//    }
+//    public void showData1(List<HoaDon> ds) {
+//        modelTaiquay.setRowCount(0);
+//            int stt=1;
+//        for (HoaDon hd : ds) {
+//            modelTaiquay.addRow(new Object[]{
+//                stt++,               
+//                hd.getMaHD(),
+//                hd.getCreateAt(),
+//                hd.getUpdateAt(),
+////                hd.getThanhTien(),
+////                hd.getMaNV(),
+//                hd.getTenNguoiNhan(),              
+//                hd.getTrangThai(),});
+//
+//        }
+//    }
+//    public void showDataChiTiet1(List<HoaDonChiTiet> ds) {
+//        model1.setRowCount(0);
+//
+//        for (HoaDonChiTiet hdct : ds) {
+//            model1.addRow(new Object[]{
+//                hdct.getMaSPCT(),
+//                hdct.getTenSp(),
+//                hdct.getTheLoai(),
+//                hdct.getTacGia(),
+//                hdct.getSoLuong(),
+//                hdct.getDonGia(),
+//                hdct.getThanhTien(),
+//               
+//            });
+//                
+//
+//        }
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -423,30 +423,30 @@ public class ViewHoaDon extends javax.swing.JPanel {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(17, 17, 17)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addGap(18, 18, 18)
+                                .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel12)
+                                .addGap(18, 18, 18)
+                                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtSoHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel12)
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtSoHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(813, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                    .addContainerGap(28, Short.MAX_VALUE)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap()))
+                        .addGap(29, 29, 29)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 1207, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -461,16 +461,13 @@ public class ViewHoaDon extends javax.swing.JPanel {
                     .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 244, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
                     .addComponent(txtSoHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15))
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addGap(117, 117, 117)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(58, Short.MAX_VALUE)))
         );
 
         jTabbedPane3.addTab("Hóa đơn", jPanel4);
@@ -492,17 +489,17 @@ public class ViewHoaDon extends javax.swing.JPanel {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 1210, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(15, 15, 15)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         jTabbedPane5.addTab("Hóa đơn chi tiết", jPanel2);

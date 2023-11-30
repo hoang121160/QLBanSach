@@ -21,9 +21,9 @@ public class HoaDonChiTietController {
         hoaDonService = new HoaDonChiTietService();
     }
 
-    public List<HoaDonChiTiet> getAllHoaDonChiTiet() {
-        return hoaDonService.getAllHoaDonChiTiet();
-    }
+//    public List<HoaDonChiTiet> getAllHoaDonChiTiet() {
+//        return hoaDonService.getAllHoaDonChiTiet();
+//    }
 
 //    public void addHoaDonChiTiet(HoaDonChiTiet hoaDonChiTiet) {
 //        hoaDonService.addHoaDonChiTiet(hoaDonChiTiet);

@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
  */
 public class HoaDon {
     private int maHD;
-    private int maKH; // Integer để có thể là null
-    private int maNV;
+    private KhachHang khachHang; 
+    private NhanVien nhanVien;
     private String tenNguoiNhan;
     private String diaChiNhan;
     private String soDienThoai;
-    private int soLuong; // Integer để có thể là null
+    private int soLuong;
     private String hinhThucThanhToan;
     private String trangThai;
     private LocalDateTime createAt;
@@ -25,13 +25,14 @@ public class HoaDon {
     private LocalDateTime updateAt;
     private String updateBy;
     private Boolean deleted;
-    private String thanhTien;
-    private String NhanVien;
 
-    public HoaDon(int maHD, int maKH, int maNV, String tenNguoiNhan, String diaChiNhan, String soDienThoai, int soLuong, String hinhThucThanhToan, String trangThai, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, Boolean deleted, String thanhTien, String NhanVien) {
+    public HoaDon() {
+    }
+
+    public HoaDon(int maHD, KhachHang khachHang, NhanVien nhanVien, String tenNguoiNhan, String diaChiNhan, String soDienThoai, int soLuong, String hinhThucThanhToan, String trangThai, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, Boolean deleted) {
         this.maHD = maHD;
-        this.maKH = maKH;
-        this.maNV = maNV;
+        this.khachHang = khachHang;
+        this.nhanVien = nhanVien;
         this.tenNguoiNhan = tenNguoiNhan;
         this.diaChiNhan = diaChiNhan;
         this.soDienThoai = soDienThoai;
@@ -43,31 +44,6 @@ public class HoaDon {
         this.updateAt = updateAt;
         this.updateBy = updateBy;
         this.deleted = deleted;
-        this.thanhTien = thanhTien;
-        this.NhanVien = NhanVien;
-    }
-
-    public String getNhanVien() {
-        return NhanVien;
-    }
-
-    public void setNhanVien(String NhanVien) {
-        this.NhanVien = NhanVien;
-    }
-
-    
-
-    public String getThanhTien() {
-        return thanhTien;
-    }
-
-    public void setThanhTien(String thanhTien) {
-        this.thanhTien = thanhTien;
-    }
-
-    
-
-    public HoaDon() {
     }
 
     public int getMaHD() {
@@ -78,20 +54,20 @@ public class HoaDon {
         this.maHD = maHD;
     }
 
-    public int getMaKH() {
-        return maKH;
+    public KhachHang getKhachHang() {
+        return khachHang;
     }
 
-    public void setMaKH(int maKH) {
-        this.maKH = maKH;
+    public void setKhachHang(KhachHang khachHang) {
+        this.khachHang = khachHang;
     }
 
-    public int getMaNV() {
-        return maNV;
+    public NhanVien getNhanVien() {
+        return nhanVien;
     }
 
-    public void setMaNV(int maNV) {
-        this.maNV = maNV;
+    public void setNhanVien(NhanVien nhanVien) {
+        this.nhanVien = nhanVien;
     }
 
     public String getTenNguoiNhan() {
@@ -181,4 +157,24 @@ public class HoaDon {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+    
+    
+    
+   
+    
+    public void setKhachHang(String tenKhachHang) {
+        if (this.khachHang == null) {
+            this.khachHang = new KhachHang();
+        }
+        this.khachHang.setTenKhachHang(tenKhachHang);
+    }
+    public void setNhanVien(String tenNhanVien) {
+        if (this.nhanVien == null) {
+            this.nhanVien = new NhanVien();
+        }
+        this.nhanVien.setTenNhanVien(tenNhanVien);
+    }
+
+
+    
 }

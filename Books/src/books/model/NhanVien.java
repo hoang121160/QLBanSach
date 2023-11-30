@@ -148,5 +148,9 @@ public class NhanVien {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    void setTenNhanVien(String tenNhanVien) {
+         this.ten = tenNhanVien;
+    }
     
 }

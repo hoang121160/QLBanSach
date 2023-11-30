@@ -42,6 +42,7 @@ public class KhachHangService {
         }
         return null;
     }
+
     public void addKhachHang(KhachHang kh) {
         Connection conn = DBconnect.getConnection();
         String sql = "INSERT INTO KhachHang (ten, gioiTinh, diaChi, soDienThoai, email) VALUES (?,?,?,?,?)";
@@ -59,6 +60,7 @@ public class KhachHangService {
             e.printStackTrace();
         }
     }
+
     public void updateKhachHang(KhachHang update) {
         Connection conn = null;
         try {
@@ -85,6 +87,7 @@ public class KhachHangService {
             }
         }
     }
+
     public void deleteKhachHang(int maKH) {
         try {
             Connection conn = DBconnect.getConnection();
@@ -100,6 +103,7 @@ public class KhachHangService {
             e.printStackTrace();
         }
     }
+
     public KhachHang findKhachHangByMaKH(int maKH) {
         KhachHang nhanVien = null;
 
@@ -131,5 +135,65 @@ public class KhachHangService {
         }
 
         return nhanVien;
+    }
+
+    public int getMaKHByTen(String tenKH) {
+        int maKH = -1; // Giả sử -1 là giá trị mặc định nếu không tìm thấy
+
+        String sql = "SELECT maKH FROM KhachHang WHERE ten = ?";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, tenKH);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                maKH = rs.getInt("maKH");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return maKH;
+    }
+
+    public List<String> getAllTenKH() {
+        List<String> tenKHList = new ArrayList<>();
+
+        String sql = "SELECT ten FROM KhachHang";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String tenKH = rs.getString("ten");
+                tenKHList.add(tenKH);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tenKHList;
+    }
+
+    public KhachHang getKhachHangByMaKH(int maKH) {
+        KhachHang khachHang = null;
+
+        String sql = "SELECT * FROM KhachHang WHERE maKH = ?";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, maKH);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                khachHang = new KhachHang();
+                khachHang.setMaKH(rs.getInt("maKH"));
+                khachHang.setTen(rs.getString("ten"));
+                khachHang.setSoDienThoai(rs.getString("soDienThoai"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return khachHang;
     }
 }

@@ -127,5 +127,8 @@ public class KhachHang {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+    public void setTenKhachHang(String tenKhachHang) {
+        this.ten = tenKhachHang;
+    }
     
 }
