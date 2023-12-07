@@ -6,6 +6,7 @@ package books.service;
 
 import books.connect.DBconnect;
 import books.model.HoaDon;
+import books.model.NhanVien;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -114,60 +115,53 @@ public class HoaDonService {
         }
     }
 
-//    public List<HoaDon> getAll() {
-//        String sql = """
-//                    SELECT 
-//                            HoaDon.maHD, 
-//                            HoaDon.maKH, 
-//                            HoaDon.maNV, 
-//                            HoaDon.tenNguoiNhan, 
-//                            HoaDon.diaChiNhan,
-//                            HoaDon.soDienThoai,
-//                            HoaDon.hinhThucThanhToan,
-//                            HoaDon.trangThai,
-//                            HoaDon.createAt,
-//                            HoaDon.updateAt,
-//                            HoaDonChiTiet.maSPCT, 
-//                            SanPhamChiTiet.ten AS tenSanPham, 
-//                            HoaDonChiTiet.soLuong, 
-//                            HoaDonChiTiet.donGia, 
-//                            HoaDonChiTiet.thanhTien,
-//                            NhanVien.ten AS tenNhanVien
-//                        FROM 
-//                            HoaDon
-//                        INNER JOIN 
-//                            HoaDonChiTiet ON HoaDon.maHD = HoaDonChiTiet.maHD
-//                        INNER JOIN 
-//                            SanPhamChiTiet ON HoaDonChiTiet.maSPCT = SanPhamChiTiet.maSPCT
-//                        INNER JOIN 
-//                            NhanVien ON HoaDon.maNV = NhanVien.maNV
-//                    """;
-//        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                HoaDon hd = new HoaDon();
-//                hd.setMaHD(rs.getInt("maHD"));
-//                hd.setMaKH(rs.getInt("maKH"));
-//                hd.setMaNV(rs.getInt("maNV"));
-//                hd.setTenNguoiNhan(rs.getString("tenNguoiNhan"));
-//                hd.setDiaChiNhan(rs.getString("diaChiNhan"));
-//                hd.setSoDienThoai(rs.getString("soDienThoai"));
-//                hd.setSoLuong(rs.getInt("soLuong"));
-//                hd.setHinhThucThanhToan(rs.getString("hinhThucThanhToan"));
-//                hd.setTrangThai(rs.getString("trangThai"));
-//                hd.setCreateAt(rs.getTimestamp("createAt").toLocalDateTime());
-//                hd.setUpdateAt(rs.getTimestamp("updateAt").toLocalDateTime());
-//                hd.setThanhTien(rs.getString("thanhTien"));
-//                hd.setNhanVien(rs.getString("tenNhanVien"));
-//
-//                list.add(hd);
-//
-//            }
-//            return list;
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public List<HoaDon> getAllHoaDonInfo() {
+        List<HoaDon> list = new ArrayList<>();
+        String sql = "SELECT hd.maHD, hd.createAt, hd.updateAt, hd.maNV, hd.tenNguoiNhan, kh.diaChi, kh.soDienThoai, hd.hinhThucThanhToan, hd.trangThai "
+                + "FROM HoaDon hd "
+                + "JOIN KhachHang kh ON hd.maKH = kh.maKH";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                HoaDon hd = new HoaDon();
+                hd.setMaHD(rs.getInt("maHD"));
+
+                // Kiểm tra giá trị null trước khi chuyển đổi
+                Timestamp createAtTimestamp = rs.getTimestamp("createAt");
+                if (createAtTimestamp != null) {
+                    hd.setCreateAt(createAtTimestamp.toLocalDateTime());
+                } else {
+                    // Xử lý trường hợp giá trị là null
+                    hd.setCreateAt(null); // hoặc thực hiện xử lý phù hợp
+                }
+
+                Timestamp updateAtTimestamp = rs.getTimestamp("updateAt");
+                if (updateAtTimestamp != null) {
+                    hd.setUpdateAt(updateAtTimestamp.toLocalDateTime());
+                } else {
+                    // Xử lý trường hợp giá trị là null
+                    hd.setUpdateAt(null); // hoặc thực hiện xử lý phù hợp
+                }
+
+                // Set the NhanVien object
+                NhanVien nhanVien = new NhanVien();
+                nhanVien.setMaNV(rs.getInt("maNV"));
+                // Set other NhanVien fields as needed
+                hd.setNhanVien(nhanVien);
+                hd.setTenNguoiNhan(rs.getString("tenNguoiNhan"));
+                hd.setDiaChiNhan(rs.getString("diaChi"));
+                hd.setSoDienThoai(rs.getString("soDienThoai"));
+                hd.setHinhThucThanhToan(rs.getString("hinhThucThanhToan"));
+                hd.setTrangThai(rs.getString("trangThai"));
+                list.add(hd);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
 }

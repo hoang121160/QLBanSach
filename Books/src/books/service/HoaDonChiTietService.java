@@ -139,7 +139,7 @@ public class HoaDonChiTietService {
 
             String query = "SELECT hdct.maHDCT, hdct.maSPCT, spct.ten AS tenSPCT, hdct.soLuong, hdct.donGia, hdct.trangThai "
                     + "FROM hoaDonChiTiet hdct "
-                    + "INNER JOIN sanPhamChiTiet spct ON hdct.maSPCT = spct.maSPCT "
+                    + "INNER JOIN SanPhamChiTiet spct ON hdct.maSPCT = spct.maSPCT "
                     + "WHERE hdct.maHD = ?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, maHD);
@@ -165,5 +165,59 @@ public class HoaDonChiTietService {
 
         return hoaDonChiTietList;
     }
+    public List<HoaDonChiTiet> getHDCTByMaHD(int maHD) {
+        List<HoaDonChiTiet> hoaDonChiTietList = new ArrayList<>();
+
+        try {
+            Connection conn = DBconnect.getConnection();
+
+            String query = """
+                           SELECT hdct.maSPCT, spct.ten AS tenSPCT,tl.ten as tenTheLoai, tg.ten as tenTacGia, hdct.soLuong, hdct.donGia
+                                              FROM hoaDonChiTiet hdct 
+                                              INNER JOIN SanPhamChiTiet spct ON hdct.maSPCT = spct.maSPCT
+                                              INNER JOIN TacGia tg ON spct.MaTacGia = tg.maTacGia
+                                               INNER JOIN TheLoai tl ON spct.maTheLoai = tl.maTheLoai
+                                             WHERE hdct.maHD = ?
+                           """;
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, maHD);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                HoaDonChiTiet hdct = new HoaDonChiTiet();
+                hdct.setSanPhamChiTiet(rs.getInt("maSPCT"));
+                hdct.setTenSPCT(rs.getString("tenSPCT"));
+                hdct.setTenTheLoai(rs.getString("tenTheLoai"));
+                hdct.setTacGia(rs.getString("tenTacGia"));
+                hdct.setSoLuong(rs.getInt("soLuong"));
+                hdct.setDonGia(rs.getBigDecimal("donGia"));
+                hoaDonChiTietList.add(hdct);
+            }
+
+            rs.close();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            // Handle other exceptions
+            e.printStackTrace();
+        }
+
+        return hoaDonChiTietList;
+    }
+     public void deleteHDCT(int maHDCT) {
+        try {
+            Connection conn = DBconnect.getConnection();
+            String query = "DELETE FROM HoaDonChiTiet WHERE maHDCT = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, maHDCT);
+            ps.executeUpdate();
+            ps.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
 
 }

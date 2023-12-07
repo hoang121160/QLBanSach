@@ -175,7 +175,7 @@ public class SanPhamChiTietService {
         try {
             Connection conn = DBconnect.getConnection();
             String query = "INSERT INTO SanPhamChiTiet (maSP, MaTacGia, MaTheLoai, ten,soLuong, gia, ngonNgu, soTrang, nhaXuatBan, namXuatBan, lanTaiBan)\n"
-                    + "VALUES(?,?,?,?,?,?,?,?,?,?)";
+                    + "VALUES(?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
 
             // Set values for the parameters
@@ -256,7 +256,7 @@ public class SanPhamChiTietService {
         }
     }
 
-    public List<SanPhamChiTiet> findSanPhamChiTietByMaSP(int maSP) {
+    public List<SanPhamChiTiet> findSanPhamChiTietByTenSPCT(String tenSPCT) {
         List<SanPhamChiTiet> sanPhamChiTietList = new ArrayList<>();
 
         try {
@@ -267,9 +267,9 @@ public class SanPhamChiTietService {
                     + "FROM SanPhamChiTiet spct "
                     + "INNER JOIN TacGia tg ON spct.MaTacGia = tg.maTacGia "
                     + "INNER JOIN TheLoai tl ON spct.MaTheLoai = tl.MaTheLoai "
-                    + "WHERE spct.maSPCT = ?";
+                    + "WHERE spct.ten LIKE ?";
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setInt(1, maSP);
+            ps.setString(1, "%" + tenSPCT + "%");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -361,6 +361,59 @@ public class SanPhamChiTietService {
             // Xử lý các ngoại lệ khác nếu cần
             e.printStackTrace();
         }
+    }
+
+    public List<SanPhamChiTiet> getSanPhamChiTietByTen(String tenSPCT) {
+        try {
+            List<SanPhamChiTiet> list = new ArrayList<>();
+            Connection conn = DBconnect.getConnection();
+
+            // Sửa đổi câu truy vấn để tìm kiếm theo tên sản phẩm chi tiết
+            String sql = "SELECT\n"
+                    + "    sp.maSP as maSP,\n"
+                    + "    spct.maSPCT,\n"
+                    + "    tg.ten AS tenTacGia,\n"
+                    + "    tl.ten AS tenTheLoai,\n"
+                    + "    spct.ten, spct.soLuong,\n"
+                    + "    spct.gia,\n"
+                    + "    spct.ngonNgu,\n"
+                    + "    spct.soTrang,\n"
+                    + "    spct.nhaXuatBan,\n"
+                    + "    spct.namXuatBan,\n"
+                    + "    spct.lanTaiBan\n"
+                    + "FROM\n"
+                    + "    SanPhamChiTiet spct\n"
+                    + "    INNER JOIN TacGia tg ON spct.MaTacGia = tg.maTacGia\n"
+                    + "    INNER JOIN TheLoai tl ON spct.MaTheLoai = tl.MaTheLoai\n"
+                    + "    INNER JOIN SanPham sp ON spct.maSP = sp.maSP\n"
+                    + "WHERE\n"
+                    + "    spct.ten LIKE ?";  // Sử dụng LIKE để tìm kiếm theo một phần của tên
+
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + tenSPCT + "%");  // Truyền giá trị tên vào câu truy vấn
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                SanPhamChiTiet spct = new SanPhamChiTiet();
+                spct.setSanPham(rs.getInt("maSP"));
+                spct.setMaSPCT(rs.getInt("maSPCT"));
+                spct.setTacGia(rs.getString("tenTacGia"));
+                spct.setTheLoai(rs.getString("tenTheLoai"));
+                spct.setTen(rs.getString("ten"));
+                spct.setSoLuong(rs.getInt("soLuong"));
+                spct.setGia(rs.getBigDecimal("gia"));
+                spct.setNgonNgu(rs.getString("ngonNgu"));
+                spct.setSoTrang(rs.getInt("soTrang"));
+                spct.setNhaXuatBan(rs.getString("nhaXuatBan"));
+                spct.setNamXuatBan(rs.getInt("namXuatBan"));
+                spct.setLanTaiBan(rs.getInt("lanTaiBan"));
+                list.add(spct);
+            }
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

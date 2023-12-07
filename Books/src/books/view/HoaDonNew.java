@@ -176,6 +176,7 @@ public class HoaDonNew extends javax.swing.JPanel {
 
         for (HoaDonChiTiet hoaDonChiTiet : hoaDonChiTietList) {
             Object[] row = {
+                hoaDonChiTiet.getMaHDCT(),
                 hoaDonChiTiet.getSanPhamChiTiet().getMaSPCT(),
                 hoaDonChiTiet.getSanPhamChiTiet().getTen(),
                 hoaDonChiTiet.getSoLuong(),
@@ -735,12 +736,17 @@ public class HoaDonNew extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Mã SPCT", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền"
+                "Mã HDCT", "Mã SPCT", "Tên sản phẩm", "Số lượng", "Đơn giá", "Thành tiền"
             }
         ));
         jScrollPane5.setViewportView(tblHDCT);
 
         jButton1.setText("Xóa");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -831,9 +837,13 @@ public class HoaDonNew extends javax.swing.JPanel {
 
         if (selectedRow != -1) {
             int maSPCT = Integer.parseInt(tblSanPhamChiTiet.getValueAt(selectedRow, 0).toString());
-            int maHD = Integer.parseInt(txtMaHD.getText());
-            if (txtMaHD.getText() == null || txtMaHD.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Mã hóa đơn đang trống !");
+            String maHDText = txtMaHD.getText();
+            int maHD = 0;
+            if (maHDText == null || maHDText.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Mã hóa đơn đang trống!");
+                return;
+            } else {
+                maHD = Integer.parseInt(maHDText);
             }
 
             // Hiển thị cửa sổ thông báo để nhập số lượng
@@ -863,6 +873,7 @@ public class HoaDonNew extends javax.swing.JPanel {
                     sanPhamChiTietService.giamSoLuongSanPhamChiTiet(maSPCT, soLuongNhap);
                     loadSanPhamChiTietToTable();
                     loadHoaDonToTable();
+                    displayHoaDonChiTiet(maHD);
                     // Cập nhật giao diện hoặc thực hiện các hành động khác nếu cần
                     // ...
                 } catch (NumberFormatException e) {
@@ -875,55 +886,50 @@ public class HoaDonNew extends javax.swing.JPanel {
 
     private void btnThemHoaDonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemHoaDonActionPerformed
         // Lấy dữ liệu từ các combo box và các thành phần khác cần thiết
-        String tenKH = (String) cboTenKH.getSelectedItem();
-        String tenNV = (String) cboTenNV.getSelectedItem();
+        // Hiển thị hộp thoại xác nhận
+        int confirmResult = JOptionPane.showConfirmDialog(
+                null,
+                "Bạn có chắc chắn muốn thêm hóa đơn?",
+                "Xác nhận thêm hóa đơn",
+                JOptionPane.YES_NO_OPTION
+        );
 
-        // Lấy mã khách hàng và nhân viên từ cơ sở dữ liệu
-        int maKH = khachHangService.getMaKHByTen(tenKH);
-        int maNV = nhanVienService.getMaNVByTen(tenNV);
+// Kiểm tra kết quả xác nhận
+        if (confirmResult == JOptionPane.YES_OPTION) {
+            // Người dùng đã chọn "Yes", thực hiện thêm hóa đơn
+            String tenKH = (String) cboTenKH.getSelectedItem();
+            String tenNV = (String) cboTenNV.getSelectedItem();
+            int maKH = khachHangService.getMaKHByTen(tenKH);
+            int maNV = nhanVienService.getMaNVByTen(tenNV);
+            KhachHang khachHang = khachHangService.getKhachHangByMaKH(maKH);
 
-        // Lấy thông tin khách hàng từ cơ sở dữ liệu
-        KhachHang khachHang = khachHangService.getKhachHangByMaKH(maKH);
+            NhanVien nhanVien = new NhanVien();
+            nhanVien.setMaNV(maNV);
 
-        // Tạo đối tượng KhachHang và NhanVien từ mã
-        NhanVien nhanVien = new NhanVien();
-        nhanVien.setMaNV(maNV);
+            HoaDon hoaDon = new HoaDon();
+            hoaDon.setTenNguoiNhan(tenKH);
+            hoaDon.setDiaChiNhan("Tại quầy");
 
-        // Tạo đối tượng HoaDon và set thông tin
-        HoaDon hoaDon = new HoaDon();
-        hoaDon.setTenNguoiNhan(tenKH);
-        hoaDon.setDiaChiNhan("Tại quầy");
+            if (khachHang != null) {
+                hoaDon.setSoDienThoai(khachHang.getSoDienThoai());
+            }
 
-        // Set số điện thoại từ thông tin khách hàng
-        if (khachHang != null) {
-            hoaDon.setSoDienThoai(khachHang.getSoDienThoai());
+            hoaDon.setHinhThucThanhToan((String) cboHinhThucTT.getSelectedItem());
+            hoaDon.setTrangThai("Chưa thanh toán");
+            hoaDon.setCreateAt(LocalDateTime.now());
+            hoaDon.setKhachHang(khachHang);
+            hoaDon.setNhanVien(nhanVien);
+
+            hoaDonService.addHoaDon(hoaDon);
+            loadHoaDonToTable();
+
+            JOptionPane.showMessageDialog(null, "Hóa đơn đã được thêm thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            // Người dùng đã chọn "No" hoặc đóng hộp thoại, không thực hiện thêm hóa đơn
+            JOptionPane.showMessageDialog(null, "Thêm hóa đơn đã bị hủy.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
 
-        hoaDon.setHinhThucThanhToan((String) cboHinhThucTT.getSelectedItem());
-        hoaDon.setTrangThai("Chưa thanh toán");
-        hoaDon.setCreateAt(LocalDateTime.now());
-        hoaDon.setKhachHang(khachHang);
-        hoaDon.setNhanVien(nhanVien);
-
-        // Gọi phương thức addHoaDon từ dịch vụ HoaDonService
-        hoaDonService.addHoaDon(hoaDon);
-        loadHoaDonToTable();
-
-        // Hiển thị thông báo thành công
-        JOptionPane.showMessageDialog(null, "Hóa đơn đã được thêm thành công.", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_btnThemHoaDonActionPerformed
-
-    private void cboHinhThucTTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboHinhThucTTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cboHinhThucTTActionPerformed
-
-    private void cboTenKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTenKHActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cboTenKHActionPerformed
-
-    private void cboTenNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTenNVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cboTenNVActionPerformed
 
     private void tblHoaDonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblHoaDonMouseClicked
         int selectedRow = tblHoaDon.getSelectedRow();
@@ -936,26 +942,80 @@ public class HoaDonNew extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tblHoaDonMouseClicked
 
+    private void cboTenNVActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTenNVActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboTenNVActionPerformed
+
+    private void cboTenKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTenKHActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboTenKHActionPerformed
+
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        int maHD = Integer.valueOf(txtMaHD.getText());
-        hoaDonService.updateHoaDonTrangThai(maHD, "Đã thanh toán");
-        loadHoaDonToTable();
-        JOptionPane.showMessageDialog(this, "Thanh toán thành công !");
-        // TODO add your handling code here:
+        // Lấy giá trị từ ô nhập liệu txtMaHD
+        String maHDString = txtMaHD.getText();
+
+// Kiểm tra xem ô nhập liệu có trống không
+        if (maHDString.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã hóa đơn.");
+            // Dừng hành động nếu txtMaHD trống
+            return;
+        }
+
+// Parse mã hóa đơn thành kiểu số nguyên
+        int maHD = Integer.valueOf(maHDString);
+
+// Hiển thị hộp thoại xác nhận
+        int confirmResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn thanh toán?", "Xác nhận thanh toán", JOptionPane.YES_NO_OPTION);
+
+        if (confirmResult == JOptionPane.YES_OPTION) {
+            // Người dùng đã chọn "Yes", thực hiện thanh toán
+            hoaDonService.updateHoaDonTrangThai(maHD, "Đã thanh toán");
+            loadHoaDonToTable();
+            JOptionPane.showMessageDialog(this, "Thanh toán thành công !");
+        } else {
+            // Người dùng đã chọn "No" hoặc đóng hộp thoại
+            JOptionPane.showMessageDialog(this, "Thanh toán đã bị hủy.");
+        }
+
     }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void txtTienKhachDuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTienKhachDuaActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_txtTienKhachDuaActionPerformed
 
     private void txtTienKhachDuaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTienKhachDuaKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTienKhachDuaKeyReleased
 
+    private void txtTienKhachDuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTienKhachDuaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTienKhachDuaActionPerformed
+
     private void txtTienKhachDuaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTienKhachDuaFocusLost
         tinhTienThua();        // TODO add your handling code here:
     }//GEN-LAST:event_txtTienKhachDuaFocusLost
+
+    private void cboHinhThucTTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboHinhThucTTActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboHinhThucTTActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        try {
+            DefaultTableModel dtm = (DefaultTableModel) tblHDCT.getModel();
+            int selectedRow = tblHDCT.getSelectedRow();
+            if (selectedRow >= 0) {
+                int maKH = (int) tblHDCT.getValueAt(selectedRow, 0);
+                int dialogResult = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa HDCT này?", "Xác nhận xóa", JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    hoaDonChiTietService.deleteHDCT(maKH);
+                    displayHoaDonChiTiet(maKH);
+                    JOptionPane.showMessageDialog(this, "Xóa HDCT thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Vui lòng nhập định dạng số hợp lệ cho mã HDCT", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi trong quá trình xóa", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
     private String getCurrentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date currentDate = new Date();

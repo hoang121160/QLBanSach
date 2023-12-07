@@ -27,13 +27,13 @@ public class HoaDonChiTiet {
     private LocalDateTime updateAt;
     private String updateBy;
     private boolean deleted;
-    private String theLoai;
-    private String tacGia;
+    private TheLoai theLoai;
+    private TacGia tacGia;
 
     public HoaDonChiTiet() {
     }
 
-    public HoaDonChiTiet(int maHDCT, HoaDon hoaDon, SanPhamChiTiet sanPhamChiTiet, String tenSP, int soLuong, BigDecimal donGia, BigDecimal thanhTien, String trangThai, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted, String theLoai, String tacGia) {
+    public HoaDonChiTiet(int maHDCT, HoaDon hoaDon, SanPhamChiTiet sanPhamChiTiet, String tenSP, int soLuong, BigDecimal donGia, BigDecimal thanhTien, String trangThai, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted, TheLoai theLoai, TacGia tacGia) {
         this.maHDCT = maHDCT;
         this.hoaDon = hoaDon;
         this.sanPhamChiTiet = sanPhamChiTiet;
@@ -156,19 +156,19 @@ public class HoaDonChiTiet {
         this.deleted = deleted;
     }
 
-    public String getTheLoai() {
+    public TheLoai getTheLoai() {
         return theLoai;
     }
 
-    public void setTheLoai(String theLoai) {
+    public void setTheLoai(TheLoai theLoai) {
         this.theLoai = theLoai;
     }
 
-    public String getTacGia() {
+    public TacGia getTacGia() {
         return tacGia;
     }
 
-    public void setTacGia(String tacGia) {
+    public void setTacGia(TacGia tacGia) {
         this.tacGia = tacGia;
     }
 
@@ -178,6 +178,7 @@ public class HoaDonChiTiet {
         }
         this.sanPhamChiTiet.setMaSPCT(maSPCT);
     }
+
     public void setHoaDon(int maHD) {
         if (this.hoaDon == null) {
             this.hoaDon = new HoaDon();
@@ -191,5 +192,16 @@ public class HoaDonChiTiet {
         }
         this.sanPhamChiTiet.setTen(tenSPCT);
     }
-
+     public void setTenTheLoai(String tenTheLoai) {
+        if (this.theLoai == null) {
+            this.theLoai = new TheLoai();
+        }
+        this.theLoai.setTen(tenTheLoai);
+    }
+     public void setTacGia(String tenTacGia) {
+        if (this.tacGia == null) {
+            this.tacGia = new TacGia();
+        }
+        this.tacGia.setTen(tenTacGia);
+    }
 }

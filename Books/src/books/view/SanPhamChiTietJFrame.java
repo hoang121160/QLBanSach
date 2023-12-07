@@ -117,9 +117,9 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
 //        }
 //    }
 
-    private void searchSanPhamChiTiet(int searchText) {
+    private void searchSanPhamChiTiet(String searchText) {
         // Thực hiện tìm kiếm dựa trên nội dung của ô nhập liệu
-        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietController.findSanPhamChiTietByMaSP(searchText);
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietController.findSanPhamChiTietByTenSPCT(searchText);
 
         // Cập nhật bảng với kết quả tìm kiếm
         updateSanPhamChiTietTable(sanPhamChiTietList);
@@ -309,17 +309,7 @@ public class SanPhamChiTietJFrame extends javax.swing.JFrame {
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         String searchText = txtSearch.getText();
-
-// Chuyển đổi chuỗi thành số nguyên
-        try {
-            int maSPCT = Integer.parseInt(searchText);
-
-            // Gọi hàm tìm kiếm với mã sản phẩm chi tiết mới
-            searchSanPhamChiTiet(maSPCT);
-        } catch (NumberFormatException ex) {
-            // Xử lý nếu người dùng nhập không phải là số nguyên
-            JOptionPane.showMessageDialog(this, "Vui lòng nhập mã sản phẩm chi tiết là một số nguyên", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
+        searchSanPhamChiTiet(searchText);
     }//GEN-LAST:event_txtSearchKeyReleased
 
     /**

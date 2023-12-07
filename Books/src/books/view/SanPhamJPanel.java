@@ -1,5 +1,6 @@
 package books.view;
 
+import books.connect.DBconnect;
 import books.controller.SanPhamChiTietController;
 import books.model.SanPham;
 import books.controller.SanPhamController;
@@ -8,13 +9,27 @@ import books.controller.TheLoaiController;
 import books.model.TacGia;
 import books.model.TheLoai;
 import books.model.SanPhamChiTiet;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
  *
@@ -133,6 +148,93 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
         // Gán model mới cho combobox
         cboTenSanPham.setModel(modelSanPham);
+    }
+
+    private void showSaveDialog() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Chọn nơi lưu tập tin Excel");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Excel files", "xlsx"));
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        // Thiết lập tên file sẵn có
+        String defaultFileName = "sanphamchitiet.xlsx";
+        File defaultFile = new File(defaultFileName);
+        fileChooser.setSelectedFile(defaultFile);
+
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            String outputPath = fileToSave.getAbsolutePath();
+
+            // Kiểm tra xem tên file có đuôi .xlsx hay không, nếu không, thêm vào
+            if (!outputPath.toLowerCase().endsWith(".xlsx")) {
+                outputPath += ".xlsx";
+            }
+
+            exportToExcel(outputPath);
+            JOptionPane.showMessageDialog(this, "Xuất Excel thành công!");
+        }
+    }
+
+    public void exportToExcel(String outputPath) {
+        try (XSSFWorkbook workbook = new XSSFWorkbook()) {
+            XSSFSheet sheet = workbook.createSheet("SPCT Data");
+
+            // Tạo hàng tiêu đề
+            XSSFRow headerRow = sheet.createRow(0);
+            String[] columns = {"STT", "Mã sản phẩm", "Mã SPCT", "Tác giả", "Thể loại", "Tên", "Số lượng", "Giá", "Ngôn ngữ", "Số trang", "Nhà xuất bản", "Năm xuất bản", "Lần tái bản"};
+            for (int i = 0; i < columns.length; i++) {
+                XSSFCell cell = headerRow.createCell(i);
+                cell.setCellValue(columns[i]);
+            }
+            try {
+                Connection con = DBconnect.getConnection();
+                String sql = "SELECT\n"
+                        + "    sp.maSP as maSP,\n"
+                        + "    spct.maSPCT,\n"
+                        + "    tg.ten AS tenTacGia,\n"
+                        + "    tl.ten AS tenTheLoai,\n"
+                        + "    spct.ten, spct.soLuong,\n"
+                        + "    spct.gia,\n"
+                        + "    spct.ngonNgu,\n"
+                        + "    spct.soTrang,\n"
+                        + "    spct.nhaXuatBan,\n"
+                        + "    spct.namXuatBan,\n"
+                        + "    spct.lanTaiBan\n"
+                        + "FROM\n"
+                        + "    SanPhamChiTiet spct\n"
+                        + "    INNER JOIN TacGia tg ON spct.MaTacGia = tg.maTacGia\n"
+                        + "    INNER JOIN TheLoai tl ON spct.MaTheLoai = tl.MaTheLoai\n"
+                        + "    INNER JOIN SanPham sp ON spct.maSP = sp.maSP";
+                PreparedStatement ps = con.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+                int rowIndex = 1;
+                while (rs.next()) {
+                    XSSFRow dataRow = sheet.createRow(rowIndex++);
+                    dataRow.createCell(0).setCellValue(rowIndex - 1);
+                    dataRow.createCell(1).setCellValue(rs.getString("maSP"));
+                    dataRow.createCell(2).setCellValue(rs.getString("maSPCT"));
+                    dataRow.createCell(3).setCellValue(rs.getString("tenTacGia"));
+                    dataRow.createCell(4).setCellValue(rs.getString("tenTheLoai"));
+                    dataRow.createCell(5).setCellValue(rs.getString("ten"));
+                    dataRow.createCell(6).setCellValue(rs.getInt("soLuong"));
+                    dataRow.createCell(7).setCellValue(rs.getDouble("gia"));
+                    dataRow.createCell(8).setCellValue(rs.getString("ngonNgu"));
+                    dataRow.createCell(9).setCellValue(rs.getInt("soTrang"));
+                    dataRow.createCell(10).setCellValue(rs.getString("nhaXuatBan"));
+                    dataRow.createCell(11).setCellValue(rs.getInt("namXuatBan"));
+                    dataRow.createCell(12).setCellValue(rs.getInt("lanTaiBan"));
+                }
+            } catch (Exception e) {
+            }
+
+            try (FileOutputStream fileOut = new FileOutputStream(outputPath)) {
+                workbook.write(fileOut);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void loadSanPhamChiTietToTable() {
@@ -300,6 +402,40 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         }
     }
 
+    private void searchSanPhamChiTiet(String searchText) {
+        // Thực hiện tìm kiếm dựa trên nội dung của ô nhập liệu
+        List<SanPhamChiTiet> sanPhamChiTietList = sanPhamChiTietController.getSanPhamChiTietByTen(searchText);
+
+        // Cập nhật bảng với kết quả tìm kiếm
+        updateSanPhamChiTietTable(sanPhamChiTietList);
+        if (sanPhamChiTietList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm chi tiết với tên " + searchText, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void updateSanPhamChiTietTable(List<SanPhamChiTiet> sanPhamChiTietList) {
+        DefaultTableModel model = (DefaultTableModel) tblSPCT.getModel();
+        model.setRowCount(0);
+        int stt = 1;
+        for (SanPhamChiTiet sanPhamChiTiet : sanPhamChiTietList) {
+            Object[] rowData = new Object[13];
+            rowData[0] = stt++;
+            rowData[1] = sanPhamChiTiet.getSanPham().getMaSP();
+            rowData[2] = sanPhamChiTiet.getMaSPCT();
+            rowData[3] = sanPhamChiTiet.getTacGia();
+            rowData[4] = sanPhamChiTiet.getTheLoai();
+            rowData[5] = sanPhamChiTiet.getTen();
+            rowData[6] = sanPhamChiTiet.getSoLuong();
+            rowData[7] = sanPhamChiTiet.getGia();
+            rowData[8] = sanPhamChiTiet.getNgonNgu();
+            rowData[9] = sanPhamChiTiet.getSoTrang();
+            rowData[10] = sanPhamChiTiet.getNhaXuatBan();
+            rowData[11] = sanPhamChiTiet.getNamXuatBan();
+            rowData[12] = sanPhamChiTiet.getLanTaiBan();
+            model.addRow(rowData);
+        }
+    }
+
 //    public void selectRow(int i, DefaultTableModel otherTableModel) {
 //        if (otherTableModel == null) {
 //            JOptionPane.showMessageDialog(this, "null");
@@ -377,6 +513,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jButton3 = new javax.swing.JButton();
         btbXoa = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         txtMaSanPham = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
@@ -389,7 +526,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblSPCT = new javax.swing.JTable();
         jLabel12 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
+        txtSearch = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jTabbedPane9 = new javax.swing.JTabbedPane();
         jPanel14 = new javax.swing.JPanel();
@@ -657,6 +794,13 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setText("Xuất Excel");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -664,11 +808,12 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnThem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btbXoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btbXoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(25, 25, 25))
+                    .addComponent(btnThem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(17, 17, 17))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -681,7 +826,9 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 .addComponent(btbXoa)
                 .addGap(18, 18, 18)
                 .addComponent(jButton5)
-                .addGap(30, 30, 30))
+                .addGap(27, 27, 27)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jLabel18.setText("Mã sản phẩm:");
@@ -762,10 +909,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel12Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(67, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel12Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -821,6 +964,10 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                     .addComponent(jLabel21)
                     .addComponent(txtSoLg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane4.addTab("Thông tin sản phẩm", jPanel12);
@@ -848,6 +995,17 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
         jLabel12.setText("Tìm kiếm sản phẩm");
 
+        txtSearch.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtSearchFocusGained(evt);
+            }
+        });
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -857,7 +1015,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 .addGap(16, 16, 16)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -865,7 +1023,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
                 .addGap(15, 15, 15)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1162,7 +1320,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
         String tenSanPham = txtTen1.getText();
-        int soLuong = Integer.parseInt(txtSoLuong.getText()) ;
+        int soLuong = Integer.parseInt(txtSoLuong.getText());
         // Kiểm tra các trường không được trống
         if (tenSanPham.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin sản phẩm!", "Thông báo", JOptionPane.WARNING_MESSAGE);
@@ -1184,7 +1342,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             txtMaSP.setText("");
             txtTen1.setText("");
             txtSoLuong.setText("");
-            
+
         } catch (Exception ex) {
             // Xử lý ngoại lệ khi thêm tác giả thất bại
             JOptionPane.showMessageDialog(this, "Thêm sản phẩm thất bại: " + ex.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
@@ -1194,14 +1352,14 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private void btnChiTietSPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChiTietSPActionPerformed
         // TODO add your handling code here:
         int row = tblSanPham.getSelectedRow();
-            if (row != -1) {
-                // Lấy giá trị từ cột thứ 1 (index 1) của dòng được chọn
-                int maSP = (int) tblSanPham.getValueAt(row, 1);
+        if (row != -1) {
+            // Lấy giá trị từ cột thứ 1 (index 1) của dòng được chọn
+            int maSP = (int) tblSanPham.getValueAt(row, 1);
 
-                // Tạo frame chi tiết và truyền mã sản phẩm
-                SanPhamChiTietJFrame chiTietJFrame = new SanPhamChiTietJFrame(maSP);
-                chiTietJFrame.setVisible(true);
-            }
+            // Tạo frame chi tiết và truyền mã sản phẩm
+            SanPhamChiTietJFrame chiTietJFrame = new SanPhamChiTietJFrame(maSP);
+            chiTietJFrame.setVisible(true);
+        }
     }//GEN-LAST:event_btnChiTietSPActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -1628,7 +1786,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Cập nhật sản phẩm thành công", "Thành công", JOptionPane.INFORMATION_MESSAGE);
 
             // Các hành động bổ sung nếu cần, như làm mới hiển thị
-            
             txtMaSP.setText("");
             txtTen1.setText("");
             txtSoLuong.setText("");
@@ -1652,12 +1809,12 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             // Lấy thông tin mới từ giao diện người dùng
             String tenMoi = txtTenSPCT.getText();
             int soLuongMoi = Integer.parseInt(txtSoLg.getText());
-            BigDecimal giaMoi = new BigDecimal(txtGia.getText()); 
+            BigDecimal giaMoi = new BigDecimal(txtGia.getText());
             String ngonNguMoi = txtNgonNgu.getText();
             int soTrangMoi = Integer.parseInt(txtSoTrang.getText());
             String nhaXuatBanMoi = txtNhaXuatBan.getText();
             int namXuatBanMoi = Integer.parseInt(txtNamXuatBan.getText());
-            int lanTaiBanMoi = Integer.parseInt(txtLanTaiBan.getText()); 
+            int lanTaiBanMoi = Integer.parseInt(txtLanTaiBan.getText());
 
             // Kiểm tra xem có thông tin cần sửa không
             if (tenMoi.isEmpty()) {
@@ -1701,6 +1858,45 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        showSaveDialog();
+    }//GEN-LAST:event_jButton1ActionPerformed
+    private boolean isInputComplete = true;
+    private Timer searchTimer;
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        String searchText = txtSearch.getText().trim();
+
+        // Kiểm tra xem văn bản tìm kiếm có trống không
+        if (!searchText.isEmpty()) {
+            isInputComplete = false;
+
+            // Hủy bỏ timer hiện tại (nếu có)
+            if (searchTimer != null) {
+                searchTimer.cancel();
+            }
+
+            // Khởi tạo và chạy timer với khoảng thời gian trì hoãn (ví dụ: 1000ms)
+            searchTimer = new Timer();
+            searchTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!isInputComplete) {
+                        // Gọi hàm tìm kiếm khi đã chắc chắn rằng người dùng không nhập tiếp
+                        searchSanPhamChiTiet(searchText);
+                    }
+                }
+            }, 500); // Thời gian trì hoãn: 1000ms (1 giây)
+        } else {
+            isInputComplete = true; // Người dùng đã nhập xong
+            loadSanPhamChiTietToTable();
+        }
+    }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void txtSearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSearchFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchFocusGained
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btbXoa;
@@ -1710,6 +1906,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> cboTacGia;
     private javax.swing.JComboBox<String> cboTenSanPham;
     private javax.swing.JComboBox<String> cboTheLoai;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1764,7 +1961,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTabbedPane jTabbedPane6;
     private javax.swing.JTabbedPane jTabbedPane7;
     private javax.swing.JTabbedPane jTabbedPane9;
-    private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
     private javax.swing.JRadioButton rdoTacGia;
     private javax.swing.JRadioButton rdoTheLoai;
@@ -1780,6 +1976,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtNamXuatBan;
     private javax.swing.JTextField txtNgonNgu;
     private javax.swing.JTextField txtNhaXuatBan;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JTextField txtSoLg;
     private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtSoTrang;

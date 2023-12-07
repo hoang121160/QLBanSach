@@ -4,6 +4,7 @@
  */
 package books.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -11,8 +12,9 @@ import java.time.LocalDateTime;
  * @author tranvandang
  */
 public class HoaDon {
+
     private int maHD;
-    private KhachHang khachHang; 
+    private KhachHang khachHang;
     private NhanVien nhanVien;
     private String tenNguoiNhan;
     private String diaChiNhan;
@@ -25,6 +27,7 @@ public class HoaDon {
     private LocalDateTime updateAt;
     private String updateBy;
     private Boolean deleted;
+    private BigDecimal tongTienHang;
 
     public HoaDon() {
     }
@@ -157,24 +160,29 @@ public class HoaDon {
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
-    
-    
-    
-   
-    
+
     public void setKhachHang(String tenKhachHang) {
         if (this.khachHang == null) {
             this.khachHang = new KhachHang();
         }
-        this.khachHang.setTenKhachHang(tenKhachHang);
+        this.khachHang.setTen(tenKhachHang);
     }
+    
     public void setNhanVien(String tenNhanVien) {
         if (this.nhanVien == null) {
             this.nhanVien = new NhanVien();
         }
-        this.nhanVien.setTenNhanVien(tenNhanVien);
+        this.nhanVien.setTen(tenNhanVien);
+    }
+    public void setMaNhanVien(int maNV) {
+        if (this.nhanVien == null) {
+            this.nhanVien = new NhanVien();
+        }
+        this.nhanVien.setMaNV(maNV);
     }
 
+    public void setTongTienHang() {
+        
+    }
 
-    
 }

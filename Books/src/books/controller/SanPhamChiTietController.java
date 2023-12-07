@@ -23,6 +23,9 @@ public class SanPhamChiTietController {
     public List<SanPhamChiTiet> getAllSanPhamChiTiet() {
         return sanPhamChiTietService.getAllSanPhamChiTiet();
     }
+    public List<SanPhamChiTiet> getSanPhamChiTietByTen(String tenSPCT) {
+        return sanPhamChiTietService.getSanPhamChiTietByTen( tenSPCT);
+    }
 
     public List<SanPhamChiTiet> getSanPhamChiTietByMaSP(int maSP) {
         return sanPhamChiTietService.getSanPhamChiTietByMaSP(maSP);
@@ -40,7 +43,7 @@ public class SanPhamChiTietController {
         sanPhamChiTietService.updateSanPhamChiTiet(sanPhamChiTiet);
     }
 
-    public List<SanPhamChiTiet> findSanPhamChiTietByMaSP(int maSP) {
-        return sanPhamChiTietService.findSanPhamChiTietByMaSP(maSP);
+    public List<SanPhamChiTiet> findSanPhamChiTietByTenSPCT(String tenSPCT) {
+        return sanPhamChiTietService.findSanPhamChiTietByTenSPCT(tenSPCT);
     }
 }
