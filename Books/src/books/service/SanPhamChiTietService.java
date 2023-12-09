@@ -14,7 +14,9 @@ import books.model.SanPhamChiTiet;
 import books.model.TacGia;
 import books.model.TheLoai;
 import books.model.SanPham;
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -350,7 +352,8 @@ public class SanPhamChiTietService {
                     updatePs.executeUpdate();
                 } else {
                     // Xử lý khi số lượng không đủ để giảm
-                    System.out.println("Số lượng không đủ để giảm.");
+                    JOptionPane.showMessageDialog(null, "Số lượng nhập vượt quá số lượng tồn kho.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
             }
 
@@ -414,6 +417,49 @@ public class SanPhamChiTietService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private void themDuLieuVaoCSDL(String maSP, String maSPCT, String tenTacGia, String tenTheLoai, String ten, int soLuong, BigDecimal gia, String ngonNgu, int soTrang, String nhaXuatBan, int namXuatBan, int lanTaiBan) {
+        String sql = "INSERT INTO SanPhamChiTiet (maSP, maSPCT, tenTacGia, tenTheLoai, ten, soLuong, gia, ngonNgu, soTrang, nhaXuatBan, namXuatBan, lanTaiBan) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maSP);
+            ps.setString(2, maSPCT);
+            ps.setString(3, tenTacGia);
+            ps.setString(4, tenTheLoai);
+            ps.setString(5, ten);
+            ps.setInt(6, soLuong);
+            ps.setBigDecimal(7, gia);
+            ps.setString(8, ngonNgu);
+            ps.setInt(9, soTrang);
+            ps.setString(10, nhaXuatBan);
+            ps.setInt(11, namXuatBan);
+            ps.setInt(12, lanTaiBan);
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void capNhatDuLieuTrongCSDL(String maSPCT, int soLuong, BigDecimal gia, int soTrang, int lanTaiBan) {
+        String sql = "UPDATE SanPhamChiTiet SET soLuong = ?, gia = ?, soTrang = ?, lanTaiBan = ? WHERE maSPCT = ?";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, soLuong);
+            ps.setBigDecimal(2, gia);
+            ps.setInt(3, soTrang);
+            ps.setInt(4, lanTaiBan);
+            ps.setString(5, maSPCT);
+
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

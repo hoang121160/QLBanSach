@@ -165,6 +165,7 @@ public class HoaDonChiTietService {
 
         return hoaDonChiTietList;
     }
+
     public List<HoaDonChiTiet> getHDCTByMaHD(int maHD) {
         List<HoaDonChiTiet> hoaDonChiTietList = new ArrayList<>();
 
@@ -204,7 +205,8 @@ public class HoaDonChiTietService {
 
         return hoaDonChiTietList;
     }
-     public void deleteHDCT(int maHDCT) {
+
+    public void deleteHDCT(int maHDCT) {
         try {
             Connection conn = DBconnect.getConnection();
             String query = "DELETE FROM HoaDonChiTiet WHERE maHDCT = ?";
@@ -217,7 +219,48 @@ public class HoaDonChiTietService {
             e.printStackTrace();
         }
     }
-    
-    
+
+    public HoaDonChiTiet getHoaDonChiTietByMaHDAndMaSPCT(int maHD, int maSPCT) {
+        String sql = "SELECT HDCT.*, SPCT.ten AS tenSPCT FROM HoaDonChiTiet HDCT "
+                + "JOIN SanPhamChiTiet SPCT ON HDCT.maSPCT = SPCT.maSPCT "
+                + "WHERE HDCT.maHD = ? AND HDCT.maSPCT = ?";
+
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, maHD);
+            ps.setInt(2, maSPCT);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    HoaDonChiTiet hdct = new HoaDonChiTiet();
+                    hdct.setMaHDCT(rs.getInt("maHDCT"));
+                    hdct.setHoaDon(rs.getInt("maHD"));
+                    hdct.setSanPhamChiTiet(rs.getInt("maSPCT"));
+                    hdct.setTenSPCT(rs.getString("tenSPCT"));
+                    hdct.setSoLuong(rs.getInt("soLuong"));
+                    hdct.setDonGia(rs.getBigDecimal("donGia"));
+//                    hdct.setThanhTien(rs.getBigDecimal("thanhTien"));
+                    return hdct;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateHoaDonChiTiet(HoaDonChiTiet updatedHDCT) {
+        String sql = "UPDATE HoaDonChiTiet SET soLuong = ?, donGia = ? WHERE maHDCT = ?";
+        try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            // Set các tham số cho câu truy vấn UPDATE
+            ps.setInt(1, updatedHDCT.getSoLuong());
+            ps.setBigDecimal(2, updatedHDCT.getDonGia());
+            ps.setInt(3, updatedHDCT.getMaHDCT());
+
+            // Thực hiện cập nhật
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

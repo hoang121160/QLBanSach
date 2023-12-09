@@ -28,6 +28,7 @@ public class HoaDon {
     private String updateBy;
     private Boolean deleted;
     private BigDecimal tongTienHang;
+    
 
     public HoaDon() {
     }

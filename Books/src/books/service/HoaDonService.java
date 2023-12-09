@@ -102,12 +102,15 @@ public class HoaDonService {
         return null;
     }
 
-    public void updateHoaDonTrangThai(int maHD, String trangThaiMoi) {
-        String sql = "UPDATE HoaDon SET trangThai = ? WHERE maHD = ?";
+    public void updateHoaDonTrangThai(int maHD, String trangThaiMoi, String hinhThucThanhToanMoi) {
+        String sql = "UPDATE HoaDon SET trangThai = ?, hinhThucThanhToan = ?, updateAt = ? WHERE maHD = ?";
         try (Connection con = DBconnect.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
             ps.setString(1, trangThaiMoi);
-            ps.setInt(2, maHD);
+            ps.setString(2, hinhThucThanhToanMoi);
+            Timestamp updateAt = new Timestamp(System.currentTimeMillis());
+            ps.setTimestamp(3, updateAt);
+            ps.setInt(4, maHD);
             ps.executeUpdate();
 
         } catch (SQLException e) {
@@ -162,6 +165,28 @@ public class HoaDonService {
         }
 
         return list;
+    }
+
+    public void deleteHoaDon(int maHD) {
+        try (Connection con = DBconnect.getConnection()) {
+            // 1. Xóa chi tiết hóa đơn
+            String deleteChiTietQuery = "DELETE FROM HoaDonChiTiet WHERE maHD = ?";
+            try (PreparedStatement deleteChiTietPs = con.prepareStatement(deleteChiTietQuery)) {
+                deleteChiTietPs.setInt(1, maHD);
+                deleteChiTietPs.executeUpdate();
+            }
+
+            // 2. Xóa hóa đơn
+            String deleteHoaDonQuery = "DELETE FROM HoaDon WHERE maHD = ?";
+            try (PreparedStatement deleteHoaDonPs = con.prepareStatement(deleteHoaDonQuery)) {
+                deleteHoaDonPs.setInt(1, maHD);
+                deleteHoaDonPs.executeUpdate();
+            }
+
+            System.out.println("Đã xóa hóa đơn và chi tiết hóa đơn liên quan.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

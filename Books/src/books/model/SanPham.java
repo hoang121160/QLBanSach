@@ -29,7 +29,7 @@ public class SanPham {
         this.maSP = maSP;
     }
 
-    public SanPham(int maSP, String ten, int soLuong, BigDecimal donGia, LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted) {
+    public SanPham(int maSP, String ten, int soLuong,LocalDateTime createAt, String createBy, LocalDateTime updateAt, String updateBy, boolean deleted) {
         this.maSP = maSP;
         this.ten = ten;
         this.soLuong = soLuong;
