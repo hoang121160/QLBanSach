@@ -37,4 +37,8 @@ public class SanPhamController {
         return service.getSanPhamByTen(tenSanPham);
 
     }
+    public List<SanPham> getSanPhamByTenSP(String tenSanPham) {
+        return service.getSanPhamByTenSP(tenSanPham);
+
+    }
 }

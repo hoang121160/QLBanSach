@@ -9,6 +9,7 @@ import books.model.SanPham;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,6 @@ public class SanPhamService {
         try {
             List<SanPham> list = new ArrayList<>();
             Connection conn = DBconnect.getConnection();
-
 
             String sql = "select maSP, ten, soLuong from SanPham";
 
@@ -55,7 +55,7 @@ public class SanPhamService {
             // Tạo PreparedStatement
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, sanPham.getTen());
-             ps.setInt(2, sanPham.getSoLuong());
+            ps.setInt(2, sanPham.getSoLuong());
             // Thực thi câu lệnh SQL để thêm tác giả vào cơ sở dữ liệu
             ps.executeUpdate();
             // Đóng kết nối và các đối tượng liên quan
@@ -73,7 +73,7 @@ public class SanPhamService {
             String sql = "UPDATE SanPham SET ten = ?, soLuong = ? WHERE maSP = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1, sanPhamToUpdate.getTen());
-             ps.setInt(2, sanPhamToUpdate.getSoLuong());
+            ps.setInt(2, sanPhamToUpdate.getSoLuong());
             ps.setInt(3, sanPhamToUpdate.getMaSP());
             ps.executeUpdate();
             ps.close();
@@ -96,4 +96,35 @@ public class SanPhamService {
         // Trả về null nếu không tìm thấy sản phẩm
         return null;
     }
+
+    public List<SanPham> getSanPhamByTenSP(String tenSanPham) {
+        List<SanPham> danhSachTimThay = new ArrayList<>();
+
+        try {
+            // Sử dụng try-with-resources để đảm bảo kết nối được đóng ngay sau khi sử dụng
+            try (Connection conn = DBconnect.getConnection(); PreparedStatement ps = conn.prepareStatement("SELECT maSP, ten, soLuong FROM SanPham WHERE ten LIKE ?")) {
+                ps.setString(1, "%" + tenSanPham + "%"); // Sử dụng LIKE để tìm tên gần đúng
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        // Lấy thông tin từ cột của kết quả truy vấn
+                        int maSP = rs.getInt("maSP");
+                        String ten = rs.getString("ten");
+                        int soLuong = rs.getInt("soLuong");
+
+                        // Tạo đối tượng SanPham chỉ với các thuộc tính cần thiết
+                        SanPham sanPham = new SanPham(maSP, ten, soLuong);
+
+                        // Thêm sản phẩm vào danh sách
+                        danhSachTimThay.add(sanPham);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Xử lý ngoại lệ một cách phù hợp (ví dụ: hiển thị thông báo lỗi)
+        }
+
+        return danhSachTimThay;
+    }
+
 }

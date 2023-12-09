@@ -40,6 +40,12 @@ public class SanPham {
         this.deleted = deleted;
     }
 
+    public SanPham(int maSP, String ten, int soLuong) {
+        this.maSP = maSP;
+        this.ten = ten;
+        this.soLuong = soLuong;
+    }
+    
     public int getMaSP() {
         return maSP;
     }

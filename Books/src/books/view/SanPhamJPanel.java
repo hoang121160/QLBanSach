@@ -336,9 +336,10 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 //    }
     public void loadSanPhamToTextBoxes(int i) {
         SanPham sanPham = new SanPham();
-        txtMaSP.setText(tblSanPham.getValueAt(i, 1).toString());
-        txtTen1.setText(tblSanPham.getValueAt(i, 2).toString());
-        txtSoLuong.setText(tblSanPham.getValueAt(i, 3).toString());
+        DefaultTableModel tblSanPhamModel = (DefaultTableModel) tblSanPham.getModel();
+        txtMaSP.setText(tblSanPhamModel.getValueAt(i, 1).toString());
+        txtTen1.setText(tblSanPhamModel.getValueAt(i, 2).toString());
+        txtSoLuong.setText(tblSanPhamModel.getValueAt(i, 3).toString());
     }
 
     private void loadTacGiaToTextBoxes(int i) {
@@ -417,6 +418,34 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm chi tiết với tên " + searchText, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
         }
     }
+
+    private void searchSanPham(String searchText) {
+        // Thực hiện tìm kiếm dựa trên nội dung của ô nhập liệu
+        List<SanPham> sanPhamList = sanPhamController.getSanPhamByTenSP(searchText);
+
+        // Cập nhật bảng với kết quả tìm kiếm
+        updateSanPhamTable(sanPhamList);
+        if (sanPhamList.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm với tên " + searchText, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private void updateSanPhamTable(List<SanPham> sanPhamList) {
+        // Xóa dữ liệu cũ trong bảng
+        DefaultTableModel model = (DefaultTableModel) tblSanPham.getModel();
+        model.setRowCount(0);
+
+        int stt = 1;
+        for (SanPham sanPham : sanPhamList) {
+            Object[] rowData = new Object[4];
+            rowData[0] = stt++;
+            rowData[1] = sanPham.getMaSP();
+            rowData[2] = sanPham.getTen();
+            rowData[3] = sanPham.getSoLuong();
+            model.addRow(rowData);
+        }
+    }
+   
 
     private void updateSanPhamChiTietTable(List<SanPhamChiTiet> sanPhamChiTietList) {
         DefaultTableModel model = (DefaultTableModel) tblSPCT.getModel();
@@ -660,7 +689,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblSanPham = new javax.swing.JTable();
         jLabel14 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
+        txtSearchSP = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jTabbedPane4 = new javax.swing.JTabbedPane();
@@ -863,6 +892,12 @@ public class SanPhamJPanel extends javax.swing.JPanel {
 
         jLabel14.setText("Tìm kiếm sản phẩm");
 
+        txtSearchSP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchSPKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -872,7 +907,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jLabel14)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSearchSP, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
@@ -880,7 +915,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addGap(0, 10, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSearchSP, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel14))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1581,11 +1616,16 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void tblSanPhamMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSanPhamMouseClicked
-
         int selectedRow = tblSanPham.getSelectedRow();
         if (selectedRow != -1) {
-            loadSanPhamToTextBoxes(selectedRow);
-        }        // TODO add your handling code here:
+            // Đảm bảo rằng số cột trong bảng là 4 (hoặc điều chỉnh theo cấu trúc của bạn)
+            if (tblSanPham.getColumnCount() == 4) {
+                loadSanPhamToTextBoxes(selectedRow);
+            } else {
+                System.err.println("Lỗi: Số lượng cột không đúng.");
+            }
+        }
+
     }//GEN-LAST:event_tblSanPhamMouseClicked
 
     private void cboTheLoaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTheLoaiActionPerformed
@@ -1724,17 +1764,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void tblSPCTCTMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblSPCTCTMouseClicked
-//        if (evt.getClickCount() == 1) {
-//            int row = tblSPCT.getSelectedRow();
-//            if (row != -1) {
-//                // Lấy giá trị từ cột thứ 1 (index 1) của dòng được chọn
-//                int maSP = (int) tblSPCT.getValueAt(row, 1);
-//
-//                // Tạo frame chi tiết và truyền mã sản phẩm
-//                SanPhamChiTietJFrame chiTietJFrame = new SanPhamChiTietJFrame(maSP);
-//                chiTietJFrame.setVisible(true);
-//            }
-//        }
+
         int selectedRow = tblSPCT.getSelectedRow();
         if (selectedRow != -1) {
             selectRow(selectedRow);
@@ -2123,6 +2153,34 @@ public class SanPhamJPanel extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Import completed successfully!");
         }
     }//GEN-LAST:event_btnImportActionPerformed
+    private void txtSearchSPKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchSPKeyReleased
+        String searchText = txtSearchSP.getText().trim();
+
+        // Kiểm tra xem văn bản tìm kiếm có trống không
+        if (!searchText.isEmpty()) {
+            isInputComplete = false;
+
+            // Hủy bỏ timer hiện tại (nếu có)
+            if (searchTimer != null) {
+                searchTimer.cancel();
+            }
+
+            // Khởi tạo và chạy timer với khoảng thời gian trì hoãn 
+            searchTimer = new Timer();
+            searchTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (!isInputComplete) {
+                        // Gọi hàm tìm kiếm khi đã chắc chắn rằng người dùng không nhập tiếp
+                        searchSanPham(searchText);
+                    }
+                }
+            }, 500);
+        } else {
+            isInputComplete = true; // Người dùng đã nhập xong
+            loadSanPhamToTable();
+        }
+    }//GEN-LAST:event_txtSearchSPKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2190,7 +2248,6 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTabbedPane jTabbedPane6;
     private javax.swing.JTabbedPane jTabbedPane7;
     private javax.swing.JTabbedPane jTabbedPane9;
-    private javax.swing.JTextField jTextField13;
     private javax.swing.JRadioButton rdoTacGia;
     private javax.swing.JRadioButton rdoTheLoai;
     private javax.swing.JTable tblSPCT;
@@ -2206,6 +2263,7 @@ public class SanPhamJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtNgonNgu;
     private javax.swing.JTextField txtNhaXuatBan;
     private javax.swing.JTextField txtSearch;
+    private javax.swing.JTextField txtSearchSP;
     private javax.swing.JTextField txtSoLg;
     private javax.swing.JTextField txtSoLuong;
     private javax.swing.JTextField txtSoTrang;

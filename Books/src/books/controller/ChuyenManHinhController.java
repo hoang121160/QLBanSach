@@ -85,7 +85,7 @@ public class ChuyenManHinhController {
                     node = new HoaDonNew();
                     break;
                 case "DangXuat":
-                    node = new SanPhamJPanel();
+                    node = new DangXuatJPanel();
                     break;
                 case "SanPhamNew":
                     node = new SanPhamJPanel();
